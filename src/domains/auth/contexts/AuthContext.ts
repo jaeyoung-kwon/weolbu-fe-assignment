@@ -4,8 +4,9 @@ import type { User } from '../api/auth.type';
 export type AuthContextValue = {
   user: User | null;
   token: string | null;
-  isAuthenticated: boolean;
-  login: (token: string, user: User) => void;
+  tokenType: string | null;
+  isLoggedIn: boolean;
+  login: (token: string, tokenType: string, user: User) => void;
   logout: () => void;
 };
 

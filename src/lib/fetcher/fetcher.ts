@@ -2,6 +2,9 @@ import ApiError from './ApiError';
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
+export const ACCESS_TOKEN_KEY = 'accessToken';
+export const TOKEN_TYPE_KEY = 'tokenType';
+
 const DEFAULT_ERROR_MESSAGES: Record<number, string> = {
   400: '잘못된 요청입니다. 입력값을 확인해주세요.',
   401: '로그인이 필요합니다.',
@@ -56,6 +59,19 @@ type RequestOptions<TRequest> = {
   headers?: HeadersInit;
 };
 
+const getAuthHeaders = (): HeadersInit => {
+  const token = JSON.parse(localStorage.getItem(ACCESS_TOKEN_KEY) || 'null');
+  const tokenType = JSON.parse(localStorage.getItem(TOKEN_TYPE_KEY) || 'null');
+
+  if (token && tokenType) {
+    return {
+      Authorization: `${tokenType} ${token}`,
+    };
+  }
+
+  return {};
+};
+
 const request = async <TRequest, TResponse>({
   path,
   method,
@@ -72,10 +88,13 @@ const request = async <TRequest, TResponse>({
     );
     url.search = new URLSearchParams(stringifiedQuery).toString();
 
+    const authHeaders = getAuthHeaders();
+
     const config: RequestInit = {
       method,
       headers: {
         'Content-Type': 'application/json',
+        ...authHeaders,
         ...headers,
       },
     };
