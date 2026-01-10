@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
+import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -10,11 +11,12 @@ export default defineConfig({
       plugins: [['@swc/plugin-emotion', {}]],
     }),
   ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   server: {
     open: true,
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: true,
   },
 });
