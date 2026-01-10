@@ -1,10 +1,239 @@
 import { createFileRoute } from '@tanstack/react-router';
-import App from '../App';
+import styled from '@emotion/styled';
+import { useState } from 'react';
+import type { ChangeEvent } from 'react';
+import { Button, Input, Radio, Text } from '../shared/components';
 
 export const Route = createFileRoute('/')({
   component: Index,
 });
 
 function Index() {
-  return <App />;
+  const [form, setForm] = useState({
+    name: '홍길동',
+    email: 'hong@weolbu.com',
+    phone: '010-1234-5678',
+    password: '******',
+    role: 'student',
+  });
+
+  const handleChange =
+    (key: keyof typeof form) => (event: ChangeEvent<HTMLInputElement>) => {
+      setForm((prev) => ({ ...prev, [key]: event.target.value }));
+    };
+
+  return (
+    <Page>
+      <FormCard>
+        <Header>
+          <AccentBar />
+          <Text as="h1" size="xl" weight="semibold">
+            회원 가입
+          </Text>
+          <Text size="sm" color="secondary">
+            몇 분이면 완료되는 간단한 가입 절차입니다.
+          </Text>
+        </Header>
+
+        <Fields>
+          <FieldGroup delay={60}>
+            <Input
+              label="이름"
+              value={form.name}
+              onChange={handleChange('name')}
+            />
+          </FieldGroup>
+          <FieldGroup delay={110}>
+            <Input
+              label="이메일"
+              type="email"
+              value={form.email}
+              onChange={handleChange('email')}
+            />
+          </FieldGroup>
+          <FieldGroup delay={160}>
+            <Input
+              label="휴대폰 번호"
+              type="tel"
+              value={form.phone}
+              onChange={handleChange('phone')}
+            />
+          </FieldGroup>
+          <FieldGroup delay={210}>
+            <Input
+              label="비밀번호"
+              type="password"
+              value={form.password}
+              onChange={handleChange('password')}
+            />
+          </FieldGroup>
+          <FieldGroup delay={260}>
+            <Text size="sm" weight="medium">
+              회원 유형
+            </Text>
+            <RadioGroup>
+              <Radio
+                label="수강생"
+                name="role"
+                value="student"
+                checked={form.role === 'student'}
+                onChange={handleChange('role')}
+              />
+              <Radio
+                label="강사"
+                name="role"
+                value="teacher"
+                checked={form.role === 'teacher'}
+                onChange={handleChange('role')}
+              />
+            </RadioGroup>
+          </FieldGroup>
+        </Fields>
+
+        <Actions>
+          <PrimaryButton type="button">가입하기</PrimaryButton>
+          <Text size="xs" color="secondary">
+            가입을 완료하면 서비스 약관과 개인정보 처리방침에 동의하는 것으로
+            간주됩니다.
+          </Text>
+        </Actions>
+      </FormCard>
+    </Page>
+  );
 }
+
+const Page = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  background:
+    radial-gradient(circle at top, rgba(255, 157, 46, 0.18), transparent 55%),
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(75, 107, 251, 0.22),
+      transparent 45%
+    ),
+    ${({ theme }) => theme.colors.background.canvas};
+  position: relative;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 999px;
+    background: linear-gradient(
+      135deg,
+      rgba(75, 107, 251, 0.18),
+      rgba(31, 59, 212, 0)
+    );
+    filter: blur(0px);
+    z-index: 0;
+  }
+
+  &::before {
+    width: 320px;
+    height: 320px;
+    top: -140px;
+    right: -120px;
+  }
+
+  &::after {
+    width: 260px;
+    height: 260px;
+    bottom: -130px;
+    left: -110px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 157, 46, 0.25),
+      rgba(231, 120, 0, 0)
+    );
+  }
+`;
+
+const FormCard = styled.form`
+  width: min(420px, 100%);
+  background: ${({ theme }) => theme.colors.background.surface};
+  border-radius: 20px;
+  border: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  padding: 32px 28px;
+  box-shadow: ${({ theme }) => theme.shadow.card};
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.55s ease-out;
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const AccentBar = styled.div`
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    ${({ theme }) => theme.colors.brand.primary},
+    #8fa3ff
+  );
+`;
+
+const Fields = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const FieldGroup = styled.div<{ delay: number }>`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeIn 0.4s ease-out;
+  animation-delay: ${({ delay }) => delay}ms;
+  animation-fill-mode: both;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+const RadioGroup = styled.div`
+  display: flex;
+  gap: 24px;
+`;
+
+const Actions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+`;
+
+const PrimaryButton = styled(Button)`
+  width: 100%;
+`;
