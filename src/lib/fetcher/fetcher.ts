@@ -74,7 +74,6 @@ const request = async <TRequest, TResponse>({
 
     const config: RequestInit = {
       method,
-      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...headers,
