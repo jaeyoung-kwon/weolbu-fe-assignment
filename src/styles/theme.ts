@@ -55,7 +55,6 @@ export const theme = {
       md: '16px',
       lg: '18px',
       xl: '24px',
-      display: '32px',
     },
     weight: {
       regular: 400,
