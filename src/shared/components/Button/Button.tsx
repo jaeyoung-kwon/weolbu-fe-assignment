@@ -8,17 +8,15 @@ interface ButtonProps extends ComponentProps<'button'> {
   variant?: ButtonVariant;
 }
 
-export const Button = ({
-  variant = 'filled',
-  children,
-  ...props
-}: ButtonProps) => {
+const Button = ({ variant = 'filled', children, ...props }: ButtonProps) => {
   return (
     <StyledButton variant={variant} {...props}>
       {children}
     </StyledButton>
   );
 };
+
+export default Button;
 
 const StyledButton = styled.button<{ variant: ButtonVariant }>`
   padding: 12px 24px;

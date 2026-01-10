@@ -7,13 +7,7 @@ interface InputProps extends ComponentProps<'input'> {
   helperText?: string;
 }
 
-export const Input = ({
-  label,
-  error,
-  helperText,
-  id,
-  ...props
-}: InputProps) => {
+const Input = ({ label, error, helperText, id, ...props }: InputProps) => {
   const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
   return (
@@ -26,6 +20,8 @@ export const Input = ({
     </InputWrapper>
   );
 };
+
+export default Input;
 
 const InputWrapper = styled.div`
   display: flex;

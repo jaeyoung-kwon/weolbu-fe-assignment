@@ -19,7 +19,7 @@ type TextProps<T extends ElementType = 'span'> = TextBaseProps &
     as?: T;
   };
 
-export const Text = <T extends ElementType = 'span'>({
+const Text = <T extends ElementType = 'span'>({
   as,
   size = 'md',
   weight = 'regular',
@@ -41,6 +41,8 @@ export const Text = <T extends ElementType = 'span'>({
     </StyledText>
   );
 };
+
+export default Text;
 
 const StyledText = styled.span<TextBaseProps>`
   font-size: ${({ theme, size }) => theme.typography.size[size || 'md']};

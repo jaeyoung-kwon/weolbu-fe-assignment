@@ -6,7 +6,7 @@ interface RadioProps extends Omit<ComponentProps<'input'>, 'type'> {
   error?: string;
 }
 
-export const Radio = ({ label, error, id, ...props }: RadioProps) => {
+const Radio = ({ label, error, id, ...props }: RadioProps) => {
   const radioId =
     id || `${props.name}-${props.value}`.toLowerCase().replace(/\s+/g, '-');
 
@@ -23,6 +23,8 @@ export const Radio = ({ label, error, id, ...props }: RadioProps) => {
     </RadioWrapper>
   );
 };
+
+export default Radio;
 
 const RadioWrapper = styled.div`
   display: flex;

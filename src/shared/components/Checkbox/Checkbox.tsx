@@ -6,7 +6,7 @@ interface CheckboxProps extends Omit<ComponentProps<'input'>, 'type'> {
   error?: string;
 }
 
-export const Checkbox = ({ label, error, id, ...props }: CheckboxProps) => {
+const Checkbox = ({ label, error, id, ...props }: CheckboxProps) => {
   const checkboxId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
   return (
@@ -24,6 +24,8 @@ export const Checkbox = ({ label, error, id, ...props }: CheckboxProps) => {
     </CheckboxWrapper>
   );
 };
+
+export default Checkbox;
 
 const CheckboxWrapper = styled.div`
   display: flex;
