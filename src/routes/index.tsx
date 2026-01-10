@@ -1,8 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 import styled from '@emotion/styled';
 import { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { Button, Input, Radio, Text } from '../shared/components';
+import { signup } from '../api/auth/auth.api';
+import type { UserRole } from '../api/auth/auth.api';
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -13,8 +16,20 @@ function Index() {
     name: '홍길동',
     email: 'hong@weolbu.com',
     phone: '010-1234-5678',
-    password: '******',
-    role: 'student',
+    password: 'Text1234',
+    role: 'STUDENT' as UserRole,
+  });
+
+  const signupMutation = useMutation({
+    mutationFn: signup,
+    onSuccess: (data) => {
+      alert(`회원가입 성공! 환영합니다, ${data.name}님!`);
+      console.log('Signup response:', data);
+    },
+    onError: (error) => {
+      alert(`회원가입 실패: ${error.message}`);
+      console.error('Signup error:', error);
+    },
   });
 
   const handleChange =
@@ -22,9 +37,21 @@ function Index() {
       setForm((prev) => ({ ...prev, [key]: event.target.value }));
     };
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    signupMutation.mutate({
+      email: form.email,
+      password: form.password,
+      name: form.name,
+      phone: form.phone,
+      role: form.role,
+    });
+  };
+
   return (
     <Page>
-      <FormCard>
+      <FormCard onSubmit={handleSubmit}>
         <Header>
           <AccentBar />
           <Text as="h1" size="xl" weight="semibold">
@@ -76,14 +103,14 @@ function Index() {
                 label="수강생"
                 name="role"
                 value="student"
-                checked={form.role === 'student'}
+                checked={form.role === 'STUDENT'}
                 onChange={handleChange('role')}
               />
               <Radio
                 label="강사"
                 name="role"
-                value="teacher"
-                checked={form.role === 'teacher'}
+                value="instructor"
+                checked={form.role === 'INSTRUCTOR'}
                 onChange={handleChange('role')}
               />
             </RadioGroup>
@@ -91,7 +118,9 @@ function Index() {
         </Fields>
 
         <Actions>
-          <PrimaryButton type="button">가입하기</PrimaryButton>
+          <PrimaryButton type="submit" disabled={signupMutation.isPending}>
+            {signupMutation.isPending ? '가입 중...' : '가입하기'}
+          </PrimaryButton>
           <Text size="xs" color="secondary">
             가입을 완료하면 서비스 약관과 개인정보 처리방침에 동의하는 것으로
             간주됩니다.
