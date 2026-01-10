@@ -16,18 +16,25 @@ import { useModalAccessibility } from './useModalAccessibility';
 export interface ModalProps {
   title?: string;
   showCloseButton?: boolean;
+  onClose?: () => void;
 }
 
 const ModalContainer = ({
   title = '',
   showCloseButton = true,
+  onClose,
   children,
 }: PropsWithChildren<ModalProps>) => {
-  const { open, onClose } = useModalContext();
+  const { open, onClose: closeModal } = useModalContext();
 
-  const modalRef = useClickOutsideRef<HTMLDivElement>(onClose);
+  const handleClose = () => {
+    closeModal();
+    onClose?.();
+  };
+
+  const modalRef = useClickOutsideRef<HTMLDivElement>(handleClose);
   useScrollLock(open);
-  useModalAccessibility(open, onClose, modalRef);
+  useModalAccessibility(open, handleClose, modalRef);
 
   return (
     open && (

@@ -11,6 +11,13 @@ const LoginModal = () => {
 
   const { mutate: login } = useLoginMutation();
 
+  const resetForm = () => {
+    setForm({
+      email: '',
+      password: '',
+    });
+  };
+
   const handleChange =
     (key: keyof typeof form) => (event: ChangeEvent<HTMLInputElement>) => {
       setForm((prev) => ({ ...prev, [key]: event.target.value }));
@@ -25,7 +32,7 @@ const LoginModal = () => {
   };
 
   return (
-    <Modal.Container title="로그인">
+    <Modal.Container title="로그인" onClose={resetForm}>
       <LoginForm onSubmit={handleSubmit}>
         <FormFields>
           <Input
