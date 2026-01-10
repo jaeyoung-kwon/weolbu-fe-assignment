@@ -1,16 +1,15 @@
-import { createFileRoute } from '@tanstack/react-router';
+import type { UserRole } from '@/domains/auth/api/auth.api';
+import { useSignupMutation } from '@/domains/auth/hooks/useSignupMutation';
+import { Input, Radio, Button, Text } from '@/shared/components';
 import styled from '@emotion/styled';
-import { useState } from 'react';
-import type { ChangeEvent, FormEvent } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { Button, Input, Radio, Text } from '../shared/components';
-import { signup, type UserRole } from '../shared/apis/auth/auth.api';
+import { createFileRoute } from '@tanstack/react-router';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 
 export const Route = createFileRoute('/')({
-  component: Index,
+  component: SignupPage,
 });
 
-function Index() {
+function SignupPage() {
   const [form, setForm] = useState({
     name: '홍길동',
     email: 'hong@weolbu.com',
@@ -19,17 +18,7 @@ function Index() {
     role: 'STUDENT' as UserRole,
   });
 
-  const signupMutation = useMutation({
-    mutationFn: signup,
-    onSuccess: (data) => {
-      alert(`회원가입 성공! 환영합니다, ${data.name}님!`);
-      console.log('Signup response:', data);
-    },
-    onError: (error) => {
-      alert(`회원가입 실패: ${error.message}`);
-      console.error('Signup error:', error);
-    },
-  });
+  const { mutate: signup } = useSignupMutation();
 
   const handleChange =
     (key: keyof typeof form) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -39,7 +28,7 @@ function Index() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    signupMutation.mutate({
+    signup({
       email: form.email,
       password: form.password,
       name: form.name,
@@ -117,9 +106,7 @@ function Index() {
         </Fields>
 
         <Actions>
-          <PrimaryButton type="submit" disabled={signupMutation.isPending}>
-            {signupMutation.isPending ? '가입 중...' : '가입하기'}
-          </PrimaryButton>
+          <PrimaryButton type="submit">가입하기</PrimaryButton>
           <Text size="xs" color="secondary">
             가입을 완료하면 서비스 약관과 개인정보 처리방침에 동의하는 것으로
             간주됩니다.
