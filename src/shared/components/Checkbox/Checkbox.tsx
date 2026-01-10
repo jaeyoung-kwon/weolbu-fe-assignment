@@ -1,13 +1,13 @@
-import styled from '@emotion/styled'
-import type { ComponentProps } from 'react'
+import styled from '@emotion/styled';
+import type { ComponentProps } from 'react';
 
 interface CheckboxProps extends Omit<ComponentProps<'input'>, 'type'> {
-  label?: string
-  error?: string
+  label?: string;
+  error?: string;
 }
 
 export const Checkbox = ({ label, error, id, ...props }: CheckboxProps) => {
-  const checkboxId = id || label?.toLowerCase().replace(/\s+/g, '-')
+  const checkboxId = id || label?.toLowerCase().replace(/\s+/g, '-');
 
   return (
     <CheckboxWrapper>
@@ -22,21 +22,21 @@ export const Checkbox = ({ label, error, id, ...props }: CheckboxProps) => {
       </CheckboxContainer>
       {error && <ErrorText>{error}</ErrorText>}
     </CheckboxWrapper>
-  )
-}
+  );
+};
 
 const CheckboxWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-`
+`;
 
 const CheckboxContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
   position: relative;
-`
+`;
 
 const HiddenCheckbox = styled.input`
   position: absolute;
@@ -44,7 +44,7 @@ const HiddenCheckbox = styled.input`
   width: 0;
   height: 0;
   pointer-events: none;
-`
+`;
 
 const CheckIcon = styled.svg`
   fill: none;
@@ -54,14 +54,15 @@ const CheckIcon = styled.svg`
   stroke-linejoin: round;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
-`
+`;
 
 const StyledCheckbox = styled.div<{ hasError: boolean; disabled?: boolean }>`
   width: 20px;
   height: 20px;
   border-radius: 4px;
   border: 2px solid
-    ${({ theme, hasError }) => (hasError ? theme.colors.state.danger : theme.colors.border.strong)};
+    ${({ theme, hasError }) =>
+      hasError ? theme.colors.state.danger : theme.colors.border.strong};
   background-color: ${({ theme }) => theme.colors.background.surface};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   display: flex;
@@ -106,7 +107,7 @@ const StyledCheckbox = styled.div<{ hasError: boolean; disabled?: boolean }>`
       border-color: ${theme.colors.border.strong};
     }
   `}
-`
+`;
 
 const Label = styled.label`
   font-size: ${({ theme }) => theme.typography.size.md};
@@ -119,10 +120,10 @@ const Label = styled.label`
     color: ${({ theme }) => theme.colors.text.disabled};
     cursor: not-allowed;
   }
-`
+`;
 
 const ErrorText = styled.span`
   font-size: ${({ theme }) => theme.typography.size.xs};
   color: ${({ theme }) => theme.colors.state.danger};
   margin-left: 28px;
-`
+`;

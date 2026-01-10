@@ -1,13 +1,14 @@
-import styled from '@emotion/styled'
-import type { ComponentProps } from 'react'
+import styled from '@emotion/styled';
+import type { ComponentProps } from 'react';
 
 interface RadioProps extends Omit<ComponentProps<'input'>, 'type'> {
-  label?: string
-  error?: string
+  label?: string;
+  error?: string;
 }
 
 export const Radio = ({ label, error, id, ...props }: RadioProps) => {
-  const radioId = id || `${props.name}-${props.value}`.toLowerCase().replace(/\s+/g, '-')
+  const radioId =
+    id || `${props.name}-${props.value}`.toLowerCase().replace(/\s+/g, '-');
 
   return (
     <RadioWrapper>
@@ -20,21 +21,21 @@ export const Radio = ({ label, error, id, ...props }: RadioProps) => {
       </RadioContainer>
       {error && <ErrorText>{error}</ErrorText>}
     </RadioWrapper>
-  )
-}
+  );
+};
 
 const RadioWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-`
+`;
 
 const RadioContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
   position: relative;
-`
+`;
 
 const HiddenRadio = styled.input`
   position: absolute;
@@ -42,7 +43,7 @@ const HiddenRadio = styled.input`
   width: 0;
   height: 0;
   pointer-events: none;
-`
+`;
 
 const RadioDot = styled.div`
   width: 10px;
@@ -51,14 +52,15 @@ const RadioDot = styled.div`
   background-color: white;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
-`
+`;
 
 const StyledRadio = styled.div<{ hasError: boolean; disabled?: boolean }>`
   width: 20px;
   height: 20px;
   border-radius: 50%;
   border: 2px solid
-    ${({ theme, hasError }) => (hasError ? theme.colors.state.danger : theme.colors.border.strong)};
+    ${({ theme, hasError }) =>
+      hasError ? theme.colors.state.danger : theme.colors.border.strong};
   background-color: ${({ theme }) => theme.colors.background.surface};
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   display: flex;
@@ -103,7 +105,7 @@ const StyledRadio = styled.div<{ hasError: boolean; disabled?: boolean }>`
       border-color: ${theme.colors.border.strong};
     }
   `}
-`
+`;
 
 const Label = styled.label`
   font-size: ${({ theme }) => theme.typography.size.md};
@@ -116,10 +118,10 @@ const Label = styled.label`
     color: ${({ theme }) => theme.colors.text.disabled};
     cursor: not-allowed;
   }
-`
+`;
 
 const ErrorText = styled.span`
   font-size: ${({ theme }) => theme.typography.size.xs};
   color: ${({ theme }) => theme.colors.state.danger};
   margin-left: 28px;
-`
+`;

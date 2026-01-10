@@ -13,6 +13,6 @@ const config = {
   printWidth: 80,
   tabWidth: 2,
   useTabs: false,
-}
+};
 
-export default config
+export default config;

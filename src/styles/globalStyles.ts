@@ -1,4 +1,4 @@
-import { css, type Theme } from '@emotion/react'
+import { css, type Theme } from '@emotion/react';
 
 export const globalStyles = (theme: Theme) => css`
   *,
@@ -75,4 +75,4 @@ export const globalStyles = (theme: Theme) => css`
     background-color: ${theme.colors.brand.primaryMuted};
     color: ${theme.colors.brand.primaryStrong};
   }
-`
+`;

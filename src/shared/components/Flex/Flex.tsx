@@ -1,29 +1,29 @@
-import styled from '@emotion/styled'
-import type { ComponentPropsWithoutRef, ElementType } from 'react'
+import styled from '@emotion/styled';
+import type { ComponentPropsWithoutRef, ElementType } from 'react';
 
-type FlexDirection = 'row' | 'column' | 'row-reverse' | 'column-reverse'
+type FlexDirection = 'row' | 'column' | 'row-reverse' | 'column-reverse';
 type JustifyContent =
   | 'flex-start'
   | 'flex-end'
   | 'center'
   | 'space-between'
   | 'space-around'
-  | 'space-evenly'
-type AlignItems = 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
-type FlexWrap = 'nowrap' | 'wrap' | 'wrap-reverse'
+  | 'space-evenly';
+type AlignItems = 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
+type FlexWrap = 'nowrap' | 'wrap' | 'wrap-reverse';
 
 interface FlexBaseProps {
-  direction?: FlexDirection
-  justify?: JustifyContent
-  align?: AlignItems
-  gap?: number
-  wrap?: FlexWrap
+  direction?: FlexDirection;
+  justify?: JustifyContent;
+  align?: AlignItems;
+  gap?: number;
+  wrap?: FlexWrap;
 }
 
 type FlexProps<T extends ElementType = 'div'> = FlexBaseProps &
   ComponentPropsWithoutRef<T> & {
-    as?: T
-  }
+    as?: T;
+  };
 
 const Flex = <T extends ElementType = 'div'>({
   as,
@@ -47,10 +47,10 @@ const Flex = <T extends ElementType = 'div'>({
     >
       {children}
     </StyledFlex>
-  )
-}
+  );
+};
 
-export default Flex
+export default Flex;
 
 const StyledFlex = styled.div<FlexBaseProps>`
   display: flex;
@@ -58,4 +58,4 @@ const StyledFlex = styled.div<FlexBaseProps>`
   flex-flow: ${({ direction }) => direction} ${({ wrap }) => wrap};
   align-items: ${({ align }) => align};
   justify-content: ${({ justify }) => justify};
-`
+`;
