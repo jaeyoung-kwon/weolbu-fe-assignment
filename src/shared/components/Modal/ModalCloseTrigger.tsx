@@ -18,7 +18,7 @@ const ModalCloseTrigger = ({
 
   if (!asChild) {
     return (
-      <button type="button" onClick={onClose} aria-label="모달 열기 버튼">
+      <button type="button" onClick={onClose} aria-label="모달 닫기 버튼">
         {children}
       </button>
     );
