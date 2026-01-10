@@ -6,6 +6,7 @@ import { Global, ThemeProvider } from '@emotion/react';
 import { routeTree } from './routeTree.gen';
 import { globalStyles, theme } from './styles';
 import { queryClient } from './lib';
+import { AuthProvider } from './domains/auth/contexts/AuthProvider';
 
 const router = createRouter({
   routeTree,
@@ -25,7 +26,9 @@ createRoot(document.getElementById('root')!).render(
     <ThemeProvider theme={theme}>
       <Global styles={globalStyles} />
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>
   </StrictMode>,

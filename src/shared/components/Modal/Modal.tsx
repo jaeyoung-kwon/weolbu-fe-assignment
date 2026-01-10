@@ -11,7 +11,6 @@ import ModalPrimaryButton from './ModalPrimaryButton';
 import { ModalProvider } from './ModalProvider';
 import ModalSecondaryButton from './ModalSecondaryButton';
 import ModalTitle from './ModalTitle';
-import { useModalAccessibility } from './useModalAccessibility';
 
 export interface ModalProps {
   title?: string;
@@ -34,7 +33,6 @@ const ModalContainer = ({
 
   const modalRef = useClickOutsideRef<HTMLDivElement>(handleClose);
   useScrollLock(open);
-  useModalAccessibility(open, handleClose, modalRef);
 
   return (
     open && (

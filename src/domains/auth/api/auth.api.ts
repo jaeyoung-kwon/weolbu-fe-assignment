@@ -1,6 +1,5 @@
 import { fetcher } from '@/lib';
-
-export type UserRole = 'STUDENT' | 'INSTRUCTOR';
+import type { User, UserRole } from './auth.type';
 
 export type SignupRequest = {
   email: string;
@@ -10,16 +9,8 @@ export type SignupRequest = {
   role: UserRole;
 };
 
-export type SignupResponse = {
-  id: string;
-  email: string;
-  name: string;
-  phone: string;
-  role: UserRole;
-};
-
-export const signup = async (props: SignupRequest): Promise<SignupResponse> => {
-  return fetcher.post<SignupRequest, SignupResponse>({
+export const signup = async (props: SignupRequest): Promise<User> => {
+  return fetcher.post<SignupRequest, User>({
     path: '/users/signup',
     body: props,
   });
@@ -33,13 +24,7 @@ export type LoginRequest = {
 export type LoginResponse = {
   accessToken: string;
   tokenType: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    phone: string;
-    role: UserRole;
-  };
+  user: User;
 };
 
 export const login = async (props: LoginRequest): Promise<LoginResponse> => {
