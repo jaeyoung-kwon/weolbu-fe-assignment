@@ -1,4 +1,4 @@
-import { fetcher } from '../../lib/fetcher/fetcher';
+import { fetcher } from '@/lib';
 
 export type UserRole = 'STUDENT' | 'INSTRUCTOR';
 

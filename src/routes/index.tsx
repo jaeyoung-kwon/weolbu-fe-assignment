@@ -4,8 +4,7 @@ import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Button, Input, Radio, Text } from '../shared/components';
-import { signup } from '../api/auth/auth.api';
-import type { UserRole } from '../api/auth/auth.api';
+import { signup, type UserRole } from '../shared/apis/auth/auth.api';
 
 export const Route = createFileRoute('/')({
   component: Index,
