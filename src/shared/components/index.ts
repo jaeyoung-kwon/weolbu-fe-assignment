@@ -4,3 +4,4 @@ export { Button } from './Button';
 export { Checkbox } from './Checkbox';
 export { Radio } from './Radio';
 export { Flex } from './Flex';
+export { Modal } from './Modal';
