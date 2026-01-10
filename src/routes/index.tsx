@@ -1,6 +1,7 @@
 import type { UserRole } from '@/domains/auth/api/auth.api';
+import LoginModal from '@/domains/auth/components/LoginModal';
 import { useSignupMutation } from '@/domains/auth/hooks/useSignupMutation';
-import { Input, Radio, Button, Text } from '@/shared/components';
+import { Input, Radio, Button, Text, Modal } from '@/shared/components';
 import styled from '@emotion/styled';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
@@ -39,80 +40,92 @@ function SignupPage() {
 
   return (
     <Page>
-      <FormCard onSubmit={handleSubmit}>
-        <Header>
-          <AccentBar />
-          <Text as="h1" size="xl" weight="semibold">
-            회원 가입
-          </Text>
-          <Text size="sm" color="secondary">
-            몇 분이면 완료되는 간단한 가입 절차입니다.
-          </Text>
-        </Header>
-
-        <Fields>
-          <FieldGroup delay={60}>
-            <Input
-              label="이름"
-              value={form.name}
-              onChange={handleChange('name')}
-            />
-          </FieldGroup>
-          <FieldGroup delay={110}>
-            <Input
-              label="이메일"
-              type="email"
-              value={form.email}
-              onChange={handleChange('email')}
-            />
-          </FieldGroup>
-          <FieldGroup delay={160}>
-            <Input
-              label="휴대폰 번호"
-              type="tel"
-              value={form.phone}
-              onChange={handleChange('phone')}
-            />
-          </FieldGroup>
-          <FieldGroup delay={210}>
-            <Input
-              label="비밀번호"
-              type="password"
-              value={form.password}
-              onChange={handleChange('password')}
-            />
-          </FieldGroup>
-          <FieldGroup delay={260}>
-            <Text size="sm" weight="medium">
-              회원 유형
+      <Modal>
+        <FormCard onSubmit={handleSubmit}>
+          <Header>
+            <AccentBar />
+            <Text as="h1" size="xl" weight="semibold">
+              회원 가입
             </Text>
-            <RadioGroup>
-              <Radio
-                label="수강생"
-                name="role"
-                value="student"
-                checked={form.role === 'STUDENT'}
-                onChange={handleChange('role')}
-              />
-              <Radio
-                label="강사"
-                name="role"
-                value="instructor"
-                checked={form.role === 'INSTRUCTOR'}
-                onChange={handleChange('role')}
-              />
-            </RadioGroup>
-          </FieldGroup>
-        </Fields>
+            <Text size="sm" color="secondary">
+              몇 분이면 완료되는 간단한 가입 절차입니다.
+            </Text>
+          </Header>
 
-        <Actions>
-          <PrimaryButton type="submit">가입하기</PrimaryButton>
-          <Text size="xs" color="secondary">
-            가입을 완료하면 서비스 약관과 개인정보 처리방침에 동의하는 것으로
-            간주됩니다.
-          </Text>
-        </Actions>
-      </FormCard>
+          <Fields>
+            <FieldGroup delay={60}>
+              <Input
+                label="이름"
+                value={form.name}
+                onChange={handleChange('name')}
+              />
+            </FieldGroup>
+            <FieldGroup delay={110}>
+              <Input
+                label="이메일"
+                type="email"
+                value={form.email}
+                onChange={handleChange('email')}
+              />
+            </FieldGroup>
+            <FieldGroup delay={160}>
+              <Input
+                label="휴대폰 번호"
+                type="tel"
+                value={form.phone}
+                onChange={handleChange('phone')}
+              />
+            </FieldGroup>
+            <FieldGroup delay={210}>
+              <Input
+                label="비밀번호"
+                type="password"
+                value={form.password}
+                onChange={handleChange('password')}
+              />
+            </FieldGroup>
+            <FieldGroup delay={260}>
+              <Text size="sm" weight="medium">
+                회원 유형
+              </Text>
+              <RadioGroup>
+                <Radio
+                  label="수강생"
+                  name="role"
+                  value="student"
+                  checked={form.role === 'STUDENT'}
+                  onChange={handleChange('role')}
+                />
+                <Radio
+                  label="강사"
+                  name="role"
+                  value="instructor"
+                  checked={form.role === 'INSTRUCTOR'}
+                  onChange={handleChange('role')}
+                />
+              </RadioGroup>
+            </FieldGroup>
+          </Fields>
+
+          <Actions>
+            <PrimaryButton type="submit">가입하기</PrimaryButton>
+            <Text size="xs" color="secondary">
+              가입을 완료하면 서비스 약관과 개인정보 처리방침에 동의하는 것으로
+              간주됩니다.
+            </Text>
+          </Actions>
+
+          <LoginSection>
+            <Text size="sm" color="secondary">
+              이미 회원이신가요?
+            </Text>
+            <Modal.OpenTrigger>
+              <LoginButton type="button">로그인</LoginButton>
+            </Modal.OpenTrigger>
+          </LoginSection>
+        </FormCard>
+        <LoginModal />
+      </Modal>
     </Page>
   );
 }
@@ -251,4 +264,38 @@ const Actions = styled.div`
 
 const PrimaryButton = styled(Button)`
   width: 100%;
+`;
+
+const LoginSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid ${({ theme }) => theme.colors.border.subtle};
+`;
+
+const LoginButton = styled.button`
+  padding: 12px 24px;
+  font-size: ${({ theme }) => theme.typography.size.md};
+  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
+  border: 2px solid ${({ theme }) => theme.colors.brand.primary};
+  background-color: transparent;
+  color: ${({ theme }) => theme.colors.brand.primary};
+  width: 100%;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.brand.primaryMuted};
+  }
+
+  &:active {
+    background-color: ${({ theme }) => theme.colors.brand.primaryMuted};
+    border-color: ${({ theme }) => theme.colors.brand.primaryStrong};
+  }
 `;
