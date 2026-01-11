@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
+import { useAuth } from '@/domains/auth/contexts/AuthContext';
+import { useCreateCourseMutation } from '@/domains/course/hooks/useCreateCourseMutation';
 
 export const Route = createFileRoute('/courses/new')({
   component: CourseNewPage,
@@ -10,8 +12,11 @@ export const Route = createFileRoute('/courses/new')({
 
 function CourseNewPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { mutate: createCourse, isPending } = useCreateCourseMutation();
   const [form, setForm] = useState({
     title: '',
+    description: '',
     capacity: '',
     price: '',
   });
@@ -27,6 +32,14 @@ function CourseNewPage() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    createCourse({
+      title: form.title,
+      description: form.description,
+      instructorName: user?.name ?? '',
+      maxStudents: Number(form.capacity),
+      price: Number(form.price),
+    });
   };
 
   return (
@@ -49,6 +62,14 @@ function CourseNewPage() {
                 placeholder="강의명을 입력하세요"
                 value={form.title}
                 onChange={handleChange('title')}
+                required
+              />
+              <Input
+                label="강의 설명"
+                placeholder="강의 설명을 입력하세요"
+                value={form.description}
+                onChange={handleChange('description')}
+                required
               />
               <Input
                 label="수강인원"
@@ -57,6 +78,7 @@ function CourseNewPage() {
                 placeholder="수강 인원을 입력하세요"
                 value={form.capacity}
                 onChange={handleChange('capacity')}
+                required
               />
               <Input
                 label="가격"
@@ -65,10 +87,13 @@ function CourseNewPage() {
                 placeholder="가격을 입력하세요"
                 value={form.price}
                 onChange={handleChange('price')}
+                required
               />
             </Fields>
             <Footer>
-              <SubmitButton type="submit">등록하기</SubmitButton>
+              <SubmitButton type="submit" disabled={isPending}>
+                {isPending ? '등록 중...' : '등록하기'}
+              </SubmitButton>
             </Footer>
           </Form>
         </Content>

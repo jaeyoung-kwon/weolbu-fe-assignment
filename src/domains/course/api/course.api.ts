@@ -69,3 +69,20 @@ export const postEnrollments = async (
     body: request,
   });
 };
+
+export type CreateCourseRequest = {
+  title: string;
+  description: string;
+  instructorName: string;
+  maxStudents: number;
+  price: number;
+};
+
+export const postCourse = async (
+  request: CreateCourseRequest,
+): Promise<CourseDetail> => {
+  return fetcher.post<CreateCourseRequest, CourseDetail>({
+    path: '/courses',
+    body: request,
+  });
+};
