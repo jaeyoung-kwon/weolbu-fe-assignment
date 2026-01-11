@@ -1,5 +1,7 @@
 import { Input, Modal } from '@/shared/components';
+import { useModalContext } from '@/shared/components/Modal/ModalContext';
 import styled from '@emotion/styled';
+import { useNavigate } from '@tanstack/react-router';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { useLoginMutation } from '../hooks/useLoginMutation';
 
@@ -9,6 +11,8 @@ const LoginModal = () => {
     password: '',
   });
 
+  const { onClose } = useModalContext();
+  const navigate = useNavigate();
   const { mutate: login } = useLoginMutation();
 
   const resetForm = () => {
@@ -25,10 +29,19 @@ const LoginModal = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    login({
-      email: form.email,
-      password: form.password,
-    });
+    login(
+      {
+        email: form.email,
+        password: form.password,
+      },
+      {
+        onSuccess: () => {
+          onClose();
+          resetForm();
+          navigate({ to: '/' });
+        },
+      },
+    );
   };
 
   return (
