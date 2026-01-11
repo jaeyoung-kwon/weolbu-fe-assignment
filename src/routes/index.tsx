@@ -1,6 +1,7 @@
 import type { SortType } from '@/domains/course/api/course.api';
 import { courseQuery } from '@/domains/course/api/course.query';
 import CourseCard from '@/domains/course/components/CourseCard';
+import { useEnrollCourseMutation } from '@/domains/course/hooks/useEnrollCourseMutation';
 import { Radio, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -23,7 +24,10 @@ function HomePage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    refetch,
   } = useInfiniteQuery(courseQuery.infiniteList({ size: 10, sort }));
+
+  const { mutate: enrollCourses } = useEnrollCourseMutation();
 
   const observerRef = useRef<HTMLDivElement>(null);
 
@@ -115,9 +119,34 @@ function HomePage() {
       return;
     }
 
-    // TODO: 실제 수강 신청 API 호출
-    alert(`${selectedCourseIds.length}개의 강의를 신청합니다.`);
-    handleExitSelectionMode();
+    enrollCourses(
+      { courseIds: selectedCourseIds },
+      {
+        onSuccess: (response) => {
+          const successCount = response.success.length;
+          const failedCount = response.failed.length;
+
+          let message = '';
+          if (successCount > 0) {
+            message += `${successCount}개의 강의 신청에 성공했습니다.`;
+          }
+          if (failedCount > 0) {
+            message += `\n\n${failedCount}개의 강의 신청에 실패했습니다:\n`;
+            response.failed.forEach((failure) => {
+              message += `- ${failure.reason}\n`;
+            });
+          }
+
+          alert(message);
+          handleExitSelectionMode();
+          refetch();
+        },
+        onError: (error) => {
+          alert('수강 신청 중 오류가 발생했습니다.');
+          console.error('Enrollment error:', error);
+        },
+      },
+    );
   };
 
   return (

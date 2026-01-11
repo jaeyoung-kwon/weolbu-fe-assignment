@@ -44,3 +44,28 @@ export const getCourseDetail = async (
     path: `/courses/${courseId}`,
   });
 };
+
+export type BatchEnrollRequest = {
+  courseIds: number[];
+};
+
+export type BatchEnrollResponse = {
+  success: {
+    enrollmentId: number;
+    courseId: number;
+    courseTitle: string;
+  }[];
+  failed: {
+    courseId: number;
+    reason: string;
+  }[];
+};
+
+export const postEnrollments = async (
+  request: BatchEnrollRequest,
+): Promise<BatchEnrollResponse> => {
+  return fetcher.post<BatchEnrollRequest, BatchEnrollResponse>({
+    path: '/enrollments/batch',
+    body: request,
+  });
+};
