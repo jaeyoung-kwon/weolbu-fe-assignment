@@ -1,14 +1,115 @@
+import { courseQuery } from '@/domains/course/api/course.query';
+import CourseCard from '@/domains/course/components/CourseCard';
+import { Text } from '@/shared/components';
 import styled from '@emotion/styled';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
+import { useEffect, useRef } from 'react';
 
 export const Route = createFileRoute('/')({
   component: HomePage,
 });
 
 function HomePage() {
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery(courseQuery.infiniteList({ size: 10 }));
+
+  const observerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!observerRef.current || !hasNextPage) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  if (isLoading) {
+    return (
+      <Page>
+        <Container>
+          <LoadingWrapper>
+            <Text size="lg">로딩 중...</Text>
+          </LoadingWrapper>
+        </Container>
+      </Page>
+    );
+  }
+
+  if (error) {
+    return (
+      <Page>
+        <Container>
+          <LoadingWrapper>
+            <Text size="lg" color="secondary">
+              강의 목록을 불러오는데 실패했습니다.
+            </Text>
+          </LoadingWrapper>
+        </Container>
+      </Page>
+    );
+  }
+
+  const totalElements = data?.pages[0]?.totalElements ?? 0;
+  const courses = data?.pages.flatMap((page) => page.content) ?? [];
+
+  if (courses.length === 0) {
+    return (
+      <Page>
+        <Container>
+          <LoadingWrapper>
+            <Text size="lg" color="secondary">
+              등록된 강의가 없습니다.
+            </Text>
+          </LoadingWrapper>
+        </Container>
+      </Page>
+    );
+  }
+
   return (
     <Page>
-      <div>홈 페이지</div>
+      <Container>
+        <Header>
+          <Text as="h1" size="xl" weight="bold">
+            강의 목록
+          </Text>
+          <Text size="sm" color="secondary">
+            총 {totalElements}개의 강의
+          </Text>
+        </Header>
+
+        <CourseGrid>
+          {courses.map((course) => (
+            <CourseCard key={course.id} course={course} />
+          ))}
+        </CourseGrid>
+
+        <ObserverTarget ref={observerRef} />
+
+        {isFetchingNextPage && (
+          <LoadingWrapper>
+            <Text size="sm" color="secondary">
+              로딩 중...
+            </Text>
+          </LoadingWrapper>
+        )}
+      </Container>
     </Page>
   );
 }
@@ -16,50 +117,39 @@ function HomePage() {
 const Page = styled.div`
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 48px 16px;
-  background:
-    radial-gradient(circle at top, rgba(255, 157, 46, 0.18), transparent 55%),
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(75, 107, 251, 0.22),
-      transparent 45%
-    ),
-    ${({ theme }) => theme.colors.background.canvas};
-  position: relative;
-  overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.background.canvas};
+`;
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    border-radius: 999px;
-    background: linear-gradient(
-      135deg,
-      rgba(75, 107, 251, 0.18),
-      rgba(31, 59, 212, 0)
-    );
-    filter: blur(0px);
-    z-index: 0;
-  }
+const Container = styled.div`
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  background-color: ${({ theme }) => theme.colors.background.surface};
+  border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  padding: 24px 16px;
+`;
 
-  &::before {
-    width: 320px;
-    height: 320px;
-    top: -140px;
-    right: -120px;
-  }
+const Header = styled.div`
+  margin-bottom: 24px;
+  text-align: center;
+`;
 
-  &::after {
-    width: 260px;
-    height: 260px;
-    bottom: -130px;
-    left: -110px;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 157, 46, 0.25),
-      rgba(231, 120, 0, 0)
-    );
-  }
+const CourseGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const ObserverTarget = styled.div`
+  height: 20px;
+  margin: 16px 0;
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
 `;
