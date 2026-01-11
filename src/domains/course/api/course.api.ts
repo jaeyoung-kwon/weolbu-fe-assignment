@@ -1,5 +1,5 @@
 import { fetcher } from '@/lib';
-import type { Course } from './course.type';
+import type { Course, CourseDetail } from './course.type';
 
 export type SortType = 'recent' | 'oldest';
 
@@ -34,5 +34,13 @@ export const getCourses = async (
       size,
       sort,
     },
+  });
+};
+
+export const getCourseDetail = async (
+  courseId: string,
+): Promise<CourseDetail> => {
+  return fetcher.get<CourseDetail>({
+    path: `/courses/${courseId}`,
   });
 };

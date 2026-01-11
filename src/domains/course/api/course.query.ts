@@ -1,5 +1,9 @@
 import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
-import { getCourses, type GetCoursesParams } from './course.api';
+import {
+  getCourseDetail,
+  getCourses,
+  type GetCoursesParams,
+} from './course.api';
 
 export const courseQuery = {
   list: (params: GetCoursesParams) =>
@@ -17,5 +21,10 @@ export const courseQuery = {
         return nextPage < lastPage.totalPages ? nextPage : undefined;
       },
       initialPageParam: 0,
+    }),
+  detail: (courseId: string) =>
+    queryOptions({
+      queryKey: ['courses', courseId],
+      queryFn: () => getCourseDetail(courseId),
     }),
 };

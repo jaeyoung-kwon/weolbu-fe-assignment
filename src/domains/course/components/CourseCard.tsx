@@ -1,5 +1,6 @@
 import { Text } from '@/shared/components';
 import styled from '@emotion/styled';
+import { useNavigate } from '@tanstack/react-router';
 import type { Course } from '../api/course.type';
 
 interface CourseCardProps {
@@ -7,12 +8,18 @@ interface CourseCardProps {
 }
 
 const CourseCard = ({ course }: CourseCardProps) => {
+  const navigate = useNavigate();
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('ko-KR').format(price);
   };
 
+  const handleClick = () => {
+    navigate({ to: '/courses/$courseId', params: { courseId: String(course.id) } });
+  };
+
   return (
-    <Card>
+    <Card onClick={handleClick}>
       <CardTop>
         <TitleWrapper>
           <Text size="lg" weight="semibold">
@@ -47,6 +54,21 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.brand.primaryMuted};
+    border-color: ${({ theme }) => theme.colors.brand.primary};
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 `;
 
 const CardTop = styled.div`
