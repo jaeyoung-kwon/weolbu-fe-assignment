@@ -1,0 +1,140 @@
+import { Button, Input, Text } from '@/shared/components';
+import styled from '@emotion/styled';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
+
+export const Route = createFileRoute('/courses/new')({
+  component: CourseNewPage,
+});
+
+function CourseNewPage() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    title: '',
+    capacity: '',
+    price: '',
+  });
+
+  const handleGoBack = () => {
+    navigate({ to: '/' });
+  };
+
+  const handleChange =
+    (key: keyof typeof form) => (event: ChangeEvent<HTMLInputElement>) => {
+      setForm((prev) => ({ ...prev, [key]: event.target.value }));
+    };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
+
+  return (
+    <Page>
+      <Container>
+        <Header>
+          <BackButton variant="transparent" onClick={handleGoBack}>
+            ← 뒤로
+          </BackButton>
+          <Text as="h1" size="xl" weight="bold">
+            강의 등록
+          </Text>
+        </Header>
+
+        <Content>
+          <Form onSubmit={handleSubmit}>
+            <Fields>
+              <Input
+                label="강의명"
+                placeholder="강의명을 입력하세요"
+                value={form.title}
+                onChange={handleChange('title')}
+              />
+              <Input
+                label="수강인원"
+                type="number"
+                min={1}
+                placeholder="수강 인원을 입력하세요"
+                value={form.capacity}
+                onChange={handleChange('capacity')}
+              />
+              <Input
+                label="가격"
+                type="number"
+                min={0}
+                placeholder="가격을 입력하세요"
+                value={form.price}
+                onChange={handleChange('price')}
+              />
+            </Fields>
+            <Footer>
+              <SubmitButton type="submit">등록하기</SubmitButton>
+            </Footer>
+          </Form>
+        </Content>
+      </Container>
+    </Page>
+  );
+}
+
+const Page = styled.div`
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.background.canvas};
+`;
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  background-color: ${({ theme }) => theme.colors.background.surface};
+  border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Header = styled.div`
+  margin-bottom: 24px;
+  text-align: center;
+  position: relative;
+`;
+
+const BackButton = styled(Button)`
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 24px;
+  padding: 16px 0 24px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 24px;
+`;
+
+const Fields = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const Footer = styled.div`
+  margin-top: auto;
+  padding-top: 16px;
+`;
+
+const SubmitButton = styled(Button)`
+  width: 100%;
+`;

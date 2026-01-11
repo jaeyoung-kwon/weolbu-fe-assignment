@@ -2,10 +2,10 @@ import type { SortType } from '@/domains/course/api/course.api';
 import { courseQuery } from '@/domains/course/api/course.query';
 import CourseCard from '@/domains/course/components/CourseCard';
 import { useEnrollCourseMutation } from '@/domains/course/hooks/useEnrollCourseMutation';
-import { Radio, Text } from '@/shared/components';
+import { Button, Radio, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 
 export const Route = createFileRoute('/')({
@@ -13,6 +13,7 @@ export const Route = createFileRoute('/')({
 });
 
 function HomePage() {
+  const navigate = useNavigate();
   const [sort, setSort] = useState<SortType>('recent');
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
@@ -149,16 +150,25 @@ function HomePage() {
     );
   };
 
+  const handleGoToNewCourse = () => {
+    navigate({ to: '/courses/new' });
+  };
+
   return (
     <Page>
       <Container hasFooter={true}>
         <Header>
-          <Text as="h1" size="xl" weight="bold">
-            강의 목록
-          </Text>
-          <Text size="sm" color="secondary">
-            총 {totalElements}개의 강의
-          </Text>
+          <HeaderContent>
+            <Text as="h1" size="xl" weight="bold">
+              강의 목록
+            </Text>
+            <Text size="sm" color="secondary">
+              총 {totalElements}개의 강의
+            </Text>
+          </HeaderContent>
+          <RegisterButton variant="transparent" onClick={handleGoToNewCourse}>
+            +강의 등록
+          </RegisterButton>
         </Header>
 
         {!isSelectionMode && (
@@ -259,6 +269,21 @@ const Container = styled.div<{ hasFooter?: boolean }>`
 const Header = styled.div`
   margin-bottom: 24px;
   text-align: center;
+  position: relative;
+`;
+
+const HeaderContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+`;
+
+const RegisterButton = styled(Button)`
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 `;
 
 const FilterSection = styled.div`

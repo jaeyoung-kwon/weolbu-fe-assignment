@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import type { ComponentProps } from 'react';
 
-type ButtonVariant = 'filled' | 'outlined';
+type ButtonVariant = 'filled' | 'outlined' | 'transparent';
 
 interface ButtonProps extends ComponentProps<'button'> {
   variant?: ButtonVariant;
@@ -50,6 +50,23 @@ const StyledButton = styled.button<{ variant: ButtonVariant }>`
         &:active:not(:disabled) {
           background-color: ${theme.colors.brand.primaryStrong};
           box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+      `;
+    }
+
+    if (variant === 'transparent') {
+      return css`
+        background-color: transparent;
+        color: ${theme.colors.text.primary};
+        border-color: transparent;
+        padding: 8px 12px;
+
+        &:hover:not(:disabled) {
+          text-decoration: underline;
+        }
+
+        &:active:not(:disabled) {
+          color: ${theme.colors.brand.primaryStrong};
         }
       `;
     }
