@@ -13,6 +13,8 @@ export const Route = createFileRoute('/')({
 
 function HomePage() {
   const [sort, setSort] = useState<SortType>('recent');
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
 
   const {
     data,
@@ -89,9 +91,38 @@ function HomePage() {
     setSort(value as SortType);
   };
 
+  const handleEnterSelectionMode = () => {
+    setIsSelectionMode(true);
+    setSelectedCourseIds([]);
+  };
+
+  const handleExitSelectionMode = () => {
+    setIsSelectionMode(false);
+    setSelectedCourseIds([]);
+  };
+
+  const handleToggleCourse = (courseId: number) => {
+    setSelectedCourseIds((prev) =>
+      prev.includes(courseId)
+        ? prev.filter((id) => id !== courseId)
+        : [...prev, courseId],
+    );
+  };
+
+  const handleEnrollSelected = () => {
+    if (selectedCourseIds.length === 0) {
+      alert('선택된 강의가 없습니다.');
+      return;
+    }
+
+    // TODO: 실제 수강 신청 API 호출
+    alert(`${selectedCourseIds.length}개의 강의를 신청합니다.`);
+    handleExitSelectionMode();
+  };
+
   return (
     <Page>
-      <Container>
+      <Container hasFooter={true}>
         <Header>
           <Text as="h1" size="xl" weight="bold">
             강의 목록
@@ -101,33 +132,41 @@ function HomePage() {
           </Text>
         </Header>
 
-        <FilterSection>
-          <Radio
-            label="최근 등록순"
-            name="sort"
-            value="recent"
-            checked={sort === 'recent'}
-            onChange={(e) => handleSortChange(e.target.value)}
-          />
-          <Radio
-            label="신청자 많은순"
-            name="sort"
-            value="popular"
-            checked={sort === 'popular'}
-            onChange={(e) => handleSortChange(e.target.value)}
-          />
-          <Radio
-            label="신청률 높은순"
-            name="sort"
-            value="rate"
-            checked={sort === 'rate'}
-            onChange={(e) => handleSortChange(e.target.value)}
-          />
-        </FilterSection>
+        {!isSelectionMode && (
+          <FilterSection>
+            <Radio
+              label="최근 등록순"
+              name="sort"
+              value="recent"
+              checked={sort === 'recent'}
+              onChange={(e) => handleSortChange(e.target.value)}
+            />
+            <Radio
+              label="신청자 많은순"
+              name="sort"
+              value="popular"
+              checked={sort === 'popular'}
+              onChange={(e) => handleSortChange(e.target.value)}
+            />
+            <Radio
+              label="신청률 높은순"
+              name="sort"
+              value="rate"
+              checked={sort === 'rate'}
+              onChange={(e) => handleSortChange(e.target.value)}
+            />
+          </FilterSection>
+        )}
 
         <CourseGrid>
           {courses.map((course) => (
-            <CourseCard key={course.id} course={course} />
+            <CourseCard
+              key={course.id}
+              course={course}
+              isSelectionMode={isSelectionMode}
+              isSelected={selectedCourseIds.includes(course.id)}
+              onToggle={() => handleToggleCourse(course.id)}
+            />
           ))}
         </CourseGrid>
 
@@ -141,6 +180,31 @@ function HomePage() {
           </LoadingWrapper>
         )}
       </Container>
+
+      <Footer>
+        {!isSelectionMode ? (
+          <EnrollModeButton onClick={handleEnterSelectionMode}>
+            강의 신청
+          </EnrollModeButton>
+        ) : (
+          <SelectionHeader>
+            <Text size="md" weight="semibold">
+              {selectedCourseIds.length}개 선택됨
+            </Text>
+            <ActionButtons>
+              <CancelButton onClick={handleExitSelectionMode}>
+                취소
+              </CancelButton>
+              <ConfirmButton
+                onClick={handleEnrollSelected}
+                disabled={selectedCourseIds.length === 0}
+              >
+                신청하기
+              </ConfirmButton>
+            </ActionButtons>
+          </SelectionHeader>
+        )}
+      </Footer>
     </Page>
   );
 }
@@ -152,7 +216,7 @@ const Page = styled.div`
   background-color: ${({ theme }) => theme.colors.background.canvas};
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ hasFooter?: boolean }>`
   width: 100%;
   max-width: 480px;
   min-height: 100vh;
@@ -160,6 +224,7 @@ const Container = styled.div`
   border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
   border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
   padding: 24px 16px;
+  padding-bottom: ${({ hasFooter }) => (hasFooter ? '100px' : '24px')};
 `;
 
 const Header = styled.div`
@@ -175,6 +240,86 @@ const FilterSection = styled.div`
   background-color: ${({ theme }) => theme.colors.background.canvas};
   border-radius: 8px;
   margin-bottom: 16px;
+`;
+
+const Footer = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  max-width: 480px;
+  background-color: ${({ theme }) => theme.colors.background.surface};
+  border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  border-top: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  padding: 16px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+`;
+
+const EnrollModeButton = styled.button`
+  width: 100%;
+  padding: 14px;
+  background-color: ${({ theme }) => theme.colors.brand.primary};
+  color: ${({ theme }) => theme.colors.text.inverse};
+  border: none;
+  border-radius: 8px;
+  font-size: ${({ theme }) => theme.typography.size.md};
+  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.brand.primaryStrong};
+  }
+`;
+
+const SelectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const CancelButton = styled.button`
+  padding: 8px 16px;
+  background-color: ${({ theme }) => theme.colors.background.surface};
+  color: ${({ theme }) => theme.colors.text.primary};
+  border: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  border-radius: 6px;
+  font-size: ${({ theme }) => theme.typography.size.sm};
+  font-weight: ${({ theme }) => theme.typography.weight.medium};
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.background.canvas};
+  }
+`;
+
+const ConfirmButton = styled.button`
+  padding: 8px 16px;
+  background-color: ${({ theme }) => theme.colors.brand.primary};
+  color: ${({ theme }) => theme.colors.text.inverse};
+  border: none;
+  border-radius: 6px;
+  font-size: ${({ theme }) => theme.typography.size.sm};
+  font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: ${({ theme }) => theme.colors.brand.primaryStrong};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
 const CourseGrid = styled.div`
