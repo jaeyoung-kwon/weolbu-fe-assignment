@@ -1,7 +1,7 @@
 import { fetcher } from '@/lib';
 import type { Course, CourseDetail } from './course.type';
 
-export type SortType = 'recent' | 'oldest';
+export type SortType = 'recent' | 'popular' | 'rate';
 
 export type GetCoursesParams = {
   page?: number;

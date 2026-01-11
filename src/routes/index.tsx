@@ -1,16 +1,19 @@
+import type { SortType } from '@/domains/course/api/course.api';
 import { courseQuery } from '@/domains/course/api/course.query';
 import CourseCard from '@/domains/course/components/CourseCard';
-import { Text } from '@/shared/components';
+import { Radio, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const Route = createFileRoute('/')({
   component: HomePage,
 });
 
 function HomePage() {
+  const [sort, setSort] = useState<SortType>('recent');
+
   const {
     data,
     isLoading,
@@ -18,7 +21,7 @@ function HomePage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(courseQuery.infiniteList({ size: 10 }));
+  } = useInfiniteQuery(courseQuery.infiniteList({ size: 10, sort }));
 
   const observerRef = useRef<HTMLDivElement>(null);
 
@@ -82,6 +85,10 @@ function HomePage() {
     );
   }
 
+  const handleSortChange = (value: string) => {
+    setSort(value as SortType);
+  };
+
   return (
     <Page>
       <Container>
@@ -93,6 +100,30 @@ function HomePage() {
             총 {totalElements}개의 강의
           </Text>
         </Header>
+
+        <FilterSection>
+          <Radio
+            label="최근 등록순"
+            name="sort"
+            value="recent"
+            checked={sort === 'recent'}
+            onChange={(e) => handleSortChange(e.target.value)}
+          />
+          <Radio
+            label="신청자 많은순"
+            name="sort"
+            value="popular"
+            checked={sort === 'popular'}
+            onChange={(e) => handleSortChange(e.target.value)}
+          />
+          <Radio
+            label="신청률 높은순"
+            name="sort"
+            value="rate"
+            checked={sort === 'rate'}
+            onChange={(e) => handleSortChange(e.target.value)}
+          />
+        </FilterSection>
 
         <CourseGrid>
           {courses.map((course) => (
@@ -134,6 +165,16 @@ const Container = styled.div`
 const Header = styled.div`
   margin-bottom: 24px;
   text-align: center;
+`;
+
+const FilterSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  background-color: ${({ theme }) => theme.colors.background.canvas};
+  border-radius: 8px;
+  margin-bottom: 16px;
 `;
 
 const CourseGrid = styled.div`
