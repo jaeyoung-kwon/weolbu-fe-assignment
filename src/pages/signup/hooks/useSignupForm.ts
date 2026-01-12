@@ -10,6 +10,14 @@ import {
 
 type Role = 'student' | 'instructor';
 
+type SignupFormData = {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  role: Role;
+};
+
 const INIT_FORM_VALUES = {
   name: '',
   email: '',
@@ -26,14 +34,6 @@ const validators: Partial<
   phone: validatePhone,
   password: validatePassword,
 };
-
-interface SignupFormData {
-  name: string;
-  email: string;
-  phone: string;
-  password: string;
-  role: Role;
-}
 
 type SignupFormErrors = Partial<Record<keyof SignupFormData, string>>;
 

@@ -23,7 +23,7 @@ export const validatePhone = (value: string) => {
   }
 
   if (!PHONE_PATTERN.test(value)) {
-    return '휴대폰 번호는 010-1234-5678 형식이어야 합니다.';
+    return '휴대폰 번호는 형식이 올바르지 않습니다.';
   }
 
   return '';

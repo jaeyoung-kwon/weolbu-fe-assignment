@@ -1,31 +1,15 @@
 import { Input, Modal } from '@/shared/components';
 import { useModalContext } from '@/shared/components/Modal/ModalContext';
 import styled from '@emotion/styled';
-import { useNavigate } from '@tanstack/react-router';
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import type { FormEvent } from 'react';
+import { useLoginForm } from '../hooks/useLoginForm';
 import { useLoginMutation } from '../hooks/useLoginMutation';
 
 const LoginModal = () => {
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-  });
+  const { form, errors, handleChange, handleBlur, resetForm } = useLoginForm();
 
   const { onClose } = useModalContext();
-  const navigate = useNavigate();
   const { mutate: login } = useLoginMutation();
-
-  const resetForm = () => {
-    setForm({
-      email: '',
-      password: '',
-    });
-  };
-
-  const handleChange =
-    (key: keyof typeof form) => (event: ChangeEvent<HTMLInputElement>) => {
-      setForm((prev) => ({ ...prev, [key]: event.target.value }));
-    };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -38,7 +22,6 @@ const LoginModal = () => {
         onSuccess: () => {
           onClose();
           resetForm();
-          navigate({ to: '/' });
         },
       },
     );
@@ -53,7 +36,9 @@ const LoginModal = () => {
             type="email"
             value={form.email}
             onChange={handleChange('email')}
+            onBlur={handleBlur('email')}
             placeholder="이메일을 입력하세요"
+            error={errors.email}
             required
           />
           <Input
@@ -61,7 +46,9 @@ const LoginModal = () => {
             type="password"
             value={form.password}
             onChange={handleChange('password')}
+            onBlur={handleBlur('password')}
             placeholder="비밀번호를 입력하세요"
+            error={errors.password}
             required
           />
         </FormFields>
