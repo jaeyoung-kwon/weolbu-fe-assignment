@@ -102,23 +102,26 @@ export default SignupForm;
 
 const Form = styled.form`
   display: flex;
-  flex-direction: column;
   gap: 16px;
+  flex-direction: column;
 `;
 
 const FieldGroup = styled.div<{ delay: number }>`
   display: flex;
-  flex-direction: column;
   gap: 12px;
-  animation: fadeIn 0.4s ease-out;
+  flex-direction: column;
+
+  animation: fade-in 0.4s ease-out;
+
   animation-delay: ${({ delay }) => delay}ms;
   animation-fill-mode: both;
 
-  @keyframes fadeIn {
+  @keyframes fade-in {
     from {
       opacity: 0;
       transform: translateY(8px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);

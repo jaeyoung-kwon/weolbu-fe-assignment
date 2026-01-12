@@ -45,11 +45,12 @@ const Text = <T extends ElementType = 'span'>({
 export default Text;
 
 const StyledText = styled.span<TextBaseProps>`
-  font-size: ${({ theme, size }) => theme.typography.size[size || 'md']};
+  margin: 0;
+
+  color: ${({ theme, color }) => theme.colors.text[color || 'primary']};
   font-weight: ${({ theme, weight }) =>
     theme.typography.weight[weight || 'regular']};
+  font-size: ${({ theme, size }) => theme.typography.size[size || 'md']};
   line-height: ${({ theme, lineHeight }) =>
     theme.typography.lineHeight[lineHeight || 'normal']};
-  color: ${({ theme, color }) => theme.colors.text[color || 'primary']};
-  margin: 0;
 `;

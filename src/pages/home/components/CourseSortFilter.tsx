@@ -42,11 +42,13 @@ const CourseSortFilter = ({ value, onChange }: CourseSortFilterProps) => {
 export default CourseSortFilter;
 
 const FilterSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px;
-  background-color: ${({ theme }) => theme.colors.background.canvas};
-  border-radius: 8px;
   margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 8px;
+
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+
+  background-color: ${({ theme }) => theme.colors.background.canvas};
 `;

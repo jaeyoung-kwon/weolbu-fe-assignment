@@ -18,6 +18,7 @@ const ModalCloseButton = () => {
 
 const StyledModalCloseButton = styled.button`
   border: none;
+
   background: none;
 
   cursor: pointer;

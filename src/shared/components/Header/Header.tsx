@@ -23,22 +23,25 @@ const Header = ({ title, left, right }: HeaderProps) => {
 export default Header;
 
 const HeaderContainer = styled.div`
-  margin-bottom: 24px;
-  height: 36px;
-  text-align: center;
   position: relative;
+  height: 36px;
+  margin-bottom: 24px;
+
+  text-align: center;
 `;
 
 const LeftSection = styled.div`
   position: absolute;
-  left: 0;
   top: 50%;
+  left: 0;
+
   transform: translateY(-50%);
 `;
 
 const RightSection = styled.div`
   position: absolute;
-  right: 0;
   top: 50%;
+  right: 0;
+
   transform: translateY(-50%);
 `;

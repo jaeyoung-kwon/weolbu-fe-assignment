@@ -15,13 +15,15 @@ const FooterContainer = styled.div`
   position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  z-index: 10;
   width: 100%;
   max-width: 480px;
-  background-color: ${({ theme }) => theme.colors.background.surface};
-  border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
   padding: 16px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
+  box-shadow: 0 -2px 8px rgb(0 0 0 / 10%);
+
+  background-color: ${({ theme }) => theme.colors.background.surface};
+
+  transform: translateX(-50%);
 `;

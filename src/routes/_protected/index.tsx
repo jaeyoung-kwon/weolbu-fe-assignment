@@ -112,10 +112,11 @@ const EnrollModeButton = styled(Button)`
 `;
 
 const SelectionHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const ActionButtons = styled.div`

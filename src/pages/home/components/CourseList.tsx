@@ -99,8 +99,8 @@ CourseList.Empty = () => {
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 16px;
+  flex-direction: column;
 `;
 
 const ObserverTarget = styled.div`
@@ -109,15 +109,17 @@ const ObserverTarget = styled.div`
 `;
 
 const TextWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 48px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const EmptyWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 48px 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

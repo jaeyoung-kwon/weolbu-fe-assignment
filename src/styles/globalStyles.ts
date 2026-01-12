@@ -8,21 +8,23 @@ export const globalStyles = (theme: Theme) => css`
   }
 
   :root {
-    font-family: ${theme.typography.fontFamily};
-    color: ${theme.colors.text.primary};
     background-color: ${theme.colors.background.canvas};
-    line-height: ${theme.typography.lineHeight.normal};
+    color: ${theme.colors.text.primary};
+    font-family: ${theme.typography.fontFamily};
     font-weight: ${theme.typography.weight.regular};
-    text-rendering: optimizeLegibility;
+    line-height: ${theme.typography.lineHeight.normal};
+
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizelegibility;
   }
 
   body {
-    margin: 0;
     min-height: 100vh;
-    font-family: inherit;
+    margin: 0;
+
     background-color: ${theme.colors.background.canvas};
     color: ${theme.colors.text.primary};
+    font-family: inherit;
   }
 
   #root {
@@ -35,6 +37,29 @@ export const globalStyles = (theme: Theme) => css`
     text-decoration: none;
   }
 
+  ul,
+  ol {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    color: inherit;
+    font: inherit;
+  }
+
+  button,
+  input,
+  textarea {
+    border: 1px solid ${theme.colors.border.subtle};
+    background-color: ${theme.colors.background.surface};
+  }
+
   a:focus-visible,
   button:focus-visible,
   input:focus-visible,
@@ -43,31 +68,9 @@ export const globalStyles = (theme: Theme) => css`
     outline: none;
   }
 
-  ul,
-  ol {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  button,
-  input,
-  textarea,
-  select {
-    font: inherit;
-    color: inherit;
-  }
-
-  button,
-  input,
-  textarea {
-    background-color: ${theme.colors.background.surface};
-    border: 1px solid ${theme.colors.border.subtle};
-  }
-
   img {
-    display: block;
     max-width: 100%;
+    display: block;
   }
 
   ::selection {

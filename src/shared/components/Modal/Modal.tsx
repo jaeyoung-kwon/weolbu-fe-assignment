@@ -52,32 +52,34 @@ const ModalContainer = ({
 };
 
 const StyledModalContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.35);
   z-index: ${({ theme }) => theme.zIndex.modal};
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgb(0 0 0 / 35%);
 `;
 
 const StyledModalContent = styled.div`
+  position: relative;
   width: calc(100vw - 72px);
   min-width: 400px;
+  padding: 24px 32px;
+  border-radius: 8px;
+
   display: flex;
+  gap: 24px;
   flex-direction: column;
 
-  position: relative;
-  padding: 24px 32px;
-  box-sizing: border-box;
   background-color: white;
 
-  gap: 24px;
-  border-radius: 8px;
+  box-sizing: border-box;
 `;
 
 const FixedCloseButtonWrapper = styled.div`

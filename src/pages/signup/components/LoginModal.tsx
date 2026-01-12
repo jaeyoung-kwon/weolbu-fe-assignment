@@ -65,12 +65,12 @@ export default LoginModal;
 
 const LoginForm = styled.form`
   display: flex;
-  flex-direction: column;
   gap: 24px;
+  flex-direction: column;
 `;
 
 const FormFields = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 16px;
+  flex-direction: column;
 `;

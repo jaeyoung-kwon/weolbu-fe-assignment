@@ -71,13 +71,16 @@ const CourseCard = ({
 export default CourseCard;
 
 const Card = styled.div<{ isSelectionMode: boolean }>`
-  background-color: ${({ theme }) => theme.colors.background.surface};
+  padding: 20px;
   border: 1px solid ${({ theme }) => theme.colors.border.subtle};
   border-radius: 12px;
-  padding: 20px;
+
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
+
+  background-color: ${({ theme }) => theme.colors.background.surface};
+
   cursor: pointer;
   transition:
     background-color 0.2s,
@@ -86,6 +89,7 @@ const Card = styled.div<{ isSelectionMode: boolean }>`
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.brand.primaryMuted};
+
     border-color: ${({ theme }) => theme.colors.brand.primary};
     transform: ${({ isSelectionMode }) =>
       isSelectionMode ? 'none' : 'translateY(-2px)'};
@@ -98,22 +102,22 @@ const Card = styled.div<{ isSelectionMode: boolean }>`
 
 const CheckboxWrapper = styled.div`
   display: flex;
-  align-items: center;
   flex-shrink: 0;
+  align-items: center;
 `;
 
 const CardContent = styled.div`
-  flex: 1;
   display: flex;
-  flex-direction: column;
   gap: 16px;
+  flex: 1;
+  flex-direction: column;
 `;
 
 const CardTop = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
 `;
 
 const TitleWrapper = styled.div`
@@ -123,22 +127,23 @@ const TitleWrapper = styled.div`
 `;
 
 const FullBadge = styled.span`
-  background-color: ${({ theme }) => theme.colors.background.disabled};
-  color: ${({ theme }) => theme.colors.text.disabled};
+  width: fit-content;
   padding: 4px 8px;
   border-radius: 4px;
-  font-size: ${({ theme }) => theme.typography.size.xs};
+
+  background-color: ${({ theme }) => theme.colors.background.disabled};
+  color: ${({ theme }) => theme.colors.text.disabled};
   font-weight: ${({ theme }) => theme.typography.weight.semibold};
-  width: fit-content;
+  font-size: ${({ theme }) => theme.typography.size.xs};
 `;
 
 const CardBottom = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 `;
 
 const Price = styled(Text)`
-  color: ${({ theme }) => theme.colors.brand.primary};
   flex-shrink: 0;
+  color: ${({ theme }) => theme.colors.brand.primary};
 `;

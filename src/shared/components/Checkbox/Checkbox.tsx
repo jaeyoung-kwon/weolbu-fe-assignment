@@ -29,48 +29,52 @@ export default Checkbox;
 
 const CheckboxWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 4px;
+  flex-direction: column;
 `;
 
 const CheckboxContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
   position: relative;
+
+  display: flex;
+  gap: 8px;
+  align-items: center;
 `;
 
 const HiddenCheckbox = styled.input`
   position: absolute;
-  opacity: 0;
   width: 0;
   height: 0;
+
+  opacity: 0;
   pointer-events: none;
 `;
 
 const CheckIcon = styled.svg`
   fill: none;
+  opacity: 0;
   stroke: white;
-  stroke-width: 2px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0;
+  stroke-width: 2px;
 `;
 
 const StyledCheckbox = styled.div<{ hasError: boolean; disabled?: boolean }>`
   width: 20px;
   height: 20px;
-  border-radius: 4px;
   border: 2px solid
     ${({ theme, hasError }) =>
       hasError ? theme.colors.state.danger : theme.colors.border.strong};
-  background-color: ${({ theme }) => theme.colors.background.surface};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  border-radius: 4px;
+
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
 
-  flex-shrink: 0;
+  background-color: ${({ theme }) => theme.colors.background.surface};
+
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   ${HiddenCheckbox}:checked + & {
     background-color: ${({ theme, hasError }) =>
@@ -108,9 +112,10 @@ const StyledCheckbox = styled.div<{ hasError: boolean; disabled?: boolean }>`
 `;
 
 const Label = styled.label`
-  font-size: ${({ theme }) => theme.typography.size.md};
-  font-weight: ${({ theme }) => theme.typography.weight.regular};
   color: ${({ theme }) => theme.colors.text.primary};
+  font-weight: ${({ theme }) => theme.typography.weight.regular};
+  font-size: ${({ theme }) => theme.typography.size.md};
+
   cursor: pointer;
   user-select: none;
 
@@ -121,7 +126,8 @@ const Label = styled.label`
 `;
 
 const ErrorText = styled.span`
-  font-size: ${({ theme }) => theme.typography.size.xs};
-  color: ${({ theme }) => theme.colors.state.danger};
   margin-left: 28px;
+
+  color: ${({ theme }) => theme.colors.state.danger};
+  font-size: ${({ theme }) => theme.typography.size.xs};
 `;

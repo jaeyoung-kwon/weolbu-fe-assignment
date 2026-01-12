@@ -74,8 +74,8 @@ const BackButton = styled(Button)``;
 
 const Content = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 24px;
+  flex-direction: column;
 `;
 
 const SubmitButton = styled(Button)`

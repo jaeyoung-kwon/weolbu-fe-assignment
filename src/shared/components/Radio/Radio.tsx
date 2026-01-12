@@ -32,22 +32,24 @@ export default Radio;
 
 const RadioWrapper = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 4px;
+  flex-direction: column;
 `;
 
 const RadioContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
   position: relative;
+
+  display: flex;
+  gap: 8px;
+  align-items: center;
 `;
 
 const HiddenRadio = styled.input`
   position: absolute;
-  opacity: 0;
   width: 0;
   height: 0;
+
+  opacity: 0;
   pointer-events: none;
 `;
 
@@ -55,7 +57,9 @@ const RadioDot = styled.div`
   width: 10px;
   height: 10px;
   border-radius: 50%;
+
   background-color: white;
+
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
 `;
@@ -63,20 +67,24 @@ const RadioDot = styled.div`
 const StyledRadio = styled.label<{ hasError: boolean; disabled?: boolean }>`
   width: 20px;
   height: 20px;
-  border-radius: 50%;
   border: 2px solid
     ${({ theme, hasError }) =>
       hasError ? theme.colors.state.danger : theme.colors.border.strong};
-  background-color: ${({ theme }) => theme.colors.background.surface};
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  border-radius: 50%;
+
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
+
+  background-color: ${({ theme }) => theme.colors.background.surface};
+
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+
   transition:
     background-color 0.2s ease-in-out,
     border-color 0.2s ease-in-out,
     box-shadow 0.2s ease-in-out;
-  flex-shrink: 0;
 
   ${HiddenRadio}:checked + & {
     background-color: ${({ theme, hasError }) =>
@@ -114,9 +122,10 @@ const StyledRadio = styled.label<{ hasError: boolean; disabled?: boolean }>`
 `;
 
 const Label = styled.label`
-  font-size: ${({ theme }) => theme.typography.size.md};
-  font-weight: ${({ theme }) => theme.typography.weight.regular};
   color: ${({ theme }) => theme.colors.text.primary};
+  font-weight: ${({ theme }) => theme.typography.weight.regular};
+  font-size: ${({ theme }) => theme.typography.size.md};
+
   cursor: pointer;
   user-select: none;
 
@@ -127,7 +136,8 @@ const Label = styled.label`
 `;
 
 const ErrorText = styled.span`
-  font-size: ${({ theme }) => theme.typography.size.xs};
-  color: ${({ theme }) => theme.colors.state.danger};
   margin-left: 28px;
+
+  color: ${({ theme }) => theme.colors.state.danger};
+  font-size: ${({ theme }) => theme.typography.size.xs};
 `;

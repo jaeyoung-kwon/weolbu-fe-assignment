@@ -84,20 +84,21 @@ function SignupPage() {
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 28px;
+  flex-direction: column;
 `;
 
 const Header = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 8px;
+  flex-direction: column;
 `;
 
 const AccentBar = styled.div`
   width: 36px;
   height: 4px;
   border-radius: 999px;
+
   background: linear-gradient(
     90deg,
     ${({ theme }) => theme.colors.brand.primary},
@@ -110,12 +111,13 @@ const PrimaryButton = styled(Button)`
 `;
 
 const LoginSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
   padding-top: 8px;
   border-top: 1px solid ${({ theme }) => theme.colors.border.subtle};
+
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const LoginButton = styled(Button)``;

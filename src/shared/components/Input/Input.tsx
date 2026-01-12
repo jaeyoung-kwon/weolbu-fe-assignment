@@ -24,40 +24,38 @@ const Input = ({ label, error, helperText, id, ...props }: InputProps) => {
 export default Input;
 
 const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
   width: 100%;
+
+  display: flex;
+  gap: 6px;
+  flex-direction: column;
 `;
 
 const Label = styled.label`
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.medium};
   color: ${({ theme }) => theme.colors.text.primary};
+  font-weight: ${({ theme }) => theme.typography.weight.medium};
+  font-size: ${({ theme }) => theme.typography.size.sm};
 `;
 
 const StyledInput = styled.input<{ hasError: boolean }>`
   padding: 12px 16px;
-  font-size: ${({ theme }) => theme.typography.size.md};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  color: ${({ theme }) => theme.colors.text.primary};
-  background-color: ${({ theme }) => theme.colors.background.surface};
+  outline: none;
   border: 2px solid
     ${({ theme, hasError }) =>
       hasError ? theme.colors.state.danger : theme.colors.border.subtle};
   border-radius: 8px;
+
+  background-color: ${({ theme }) => theme.colors.background.surface};
+  color: ${({ theme }) => theme.colors.text.primary};
+  font-family: ${({ theme }) => theme.typography.fontFamily};
+  font-size: ${({ theme }) => theme.typography.size.md};
+
   transition:
     border-color 0.2s ease-in-out,
     box-shadow 0.2s ease-in-out;
-  outline: none;
 
   &::placeholder {
     color: ${({ theme }) => theme.colors.text.disabled};
-  }
-
-  &:hover:not(:disabled) {
-    border-color: ${({ theme, hasError }) =>
-      hasError ? theme.colors.state.danger : theme.colors.border.strong};
   }
 
   &:focus {
@@ -68,13 +66,19 @@ const StyledInput = styled.input<{ hasError: boolean }>`
   &:disabled {
     background-color: ${({ theme }) => theme.colors.background.disabled};
     color: ${({ theme }) => theme.colors.text.disabled};
+
     border-color: ${({ theme }) => theme.colors.border.subtle};
     cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: ${({ theme, hasError }) =>
+      hasError ? theme.colors.state.danger : theme.colors.border.strong};
   }
 `;
 
 const HelperText = styled.span<{ hasError: boolean }>`
-  font-size: ${({ theme }) => theme.typography.size.xs};
   color: ${({ theme, hasError }) =>
     hasError ? theme.colors.state.danger : theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.typography.size.xs};
 `;
