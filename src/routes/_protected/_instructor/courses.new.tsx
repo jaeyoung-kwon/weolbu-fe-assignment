@@ -1,6 +1,7 @@
 import CourseForm from '@/pages/course-create/components/CourseForm';
 import { useCourseForm } from '@/pages/course-create/hooks/useCourseForm';
 import { useCreateCourseMutation } from '@/pages/course-create/hooks/useCreateCourseMutation';
+import { parsePriceValue } from '@/pages/course-create/utils/parser';
 import { Button, Footer, Header, PageLayout } from '@/shared/components';
 import { useAuth } from '@/shared/contexts/auth';
 import styled from '@emotion/styled';
@@ -14,7 +15,8 @@ export const Route = createFileRoute('/_protected/_instructor/courses/new')({
 function CourseNewPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { form, handleChange, resetForm } = useCourseForm();
+  const { form, errors, handleChange, handleBlur, validateForm, resetForm } =
+    useCourseForm();
   const { mutate: createCourse, isPending } = useCreateCourseMutation();
 
   const handleGoBack = () => {
@@ -25,13 +27,17 @@ function CourseNewPage() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
+
     createCourse(
       {
         title: form.title,
         description: form.description,
         instructorName: user?.name ?? '',
         maxStudents: Number(form.capacity),
-        price: Number(form.price),
+        price: parsePriceValue(form.price),
       },
       {
         onSuccess: () => {
@@ -56,13 +62,19 @@ function CourseNewPage() {
       <Content>
         <CourseForm
           form={form}
+          errors={errors}
           onSubmit={handleSubmit}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
       </Content>
 
       <Footer>
-        <SubmitButton type="submit" form="course-form" disabled={isPending}>
+        <SubmitButton
+          type="submit"
+          form="course-form"
+          disabled={isPending || Object.keys(errors).length > 0}
+        >
           {isPending ? '등록 중...' : '등록하기'}
         </SubmitButton>
       </Footer>

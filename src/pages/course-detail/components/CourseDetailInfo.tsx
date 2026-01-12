@@ -48,33 +48,35 @@ export default CourseDetailInfo;
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
   gap: 12px;
+  flex-direction: column;
 `;
 
 const InfoCard = styled.div`
-  background-color: ${({ theme }) => theme.colors.background.canvas};
+  padding: 16px;
   border: 1px solid ${({ theme }) => theme.colors.border.subtle};
   border-radius: 8px;
-  padding: 16px;
+
   display: flex;
-  flex-direction: column;
   gap: 8px;
+  flex-direction: column;
+
+  background-color: ${({ theme }) => theme.colors.background.canvas};
 `;
 
 const InfoLabel = styled(Text)`
-  font-size: ${({ theme }) => theme.typography.size.sm};
   color: ${({ theme }) => theme.colors.text.secondary};
   font-weight: ${({ theme }) => theme.typography.weight.medium};
+  font-size: ${({ theme }) => theme.typography.size.sm};
 `;
 
 const InfoValue = styled(Text)`
-  font-size: ${({ theme }) => theme.typography.size.lg};
   font-weight: ${({ theme }) => theme.typography.weight.semibold};
+  font-size: ${({ theme }) => theme.typography.size.lg};
 `;
 
 const AvailableSeats = styled(Text)`
-  font-size: ${({ theme }) => theme.typography.size.sm};
   color: ${({ theme }) => theme.colors.brand.primary};
   font-weight: ${({ theme }) => theme.typography.weight.medium};
+  font-size: ${({ theme }) => theme.typography.size.sm};
 `;
