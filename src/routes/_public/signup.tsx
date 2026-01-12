@@ -13,7 +13,7 @@ export const Route = createFileRoute('/_public/signup')({
 });
 
 function SignupPage() {
-  const { form, handleChange } = useSignupForm();
+  const { form, errors, handleChange, handleBlur } = useSignupForm();
 
   const { mutate: login } = useLoginMutation();
   const { mutate: signup } = useSignupMutation();
@@ -42,25 +42,31 @@ function SignupPage() {
 
   return (
     <PageLayout>
-      <Modal>
-        <FormCard onSubmit={handleSubmit}>
-          <Header>
-            <AccentBar />
-            <Text as="h1" size="xl" weight="semibold">
-              회원 가입
-            </Text>
-          </Header>
+      <Container>
+        <Header>
+          <AccentBar />
+          <Text as="h1" size="xl" weight="semibold">
+            회원 가입
+          </Text>
+        </Header>
 
-          <SignupForm
-            form={form}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-          />
+        <SignupForm
+          form={form}
+          errors={errors}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onSubmit={handleSubmit}
+        />
 
-          <PrimaryButton type="submit" form="signup-form">
-            가입하기
-          </PrimaryButton>
+        <PrimaryButton
+          type="submit"
+          form="signup-form"
+          disabled={Object.keys(errors).length > 0}
+        >
+          가입하기
+        </PrimaryButton>
 
+        <Modal>
           <LoginSection>
             <Text size="sm" color="secondary">
               이미 회원이신가요?
@@ -68,15 +74,15 @@ function SignupPage() {
             <Modal.OpenTrigger asChild>
               <LoginButton variant="outlined">로그인</LoginButton>
             </Modal.OpenTrigger>
+            <LoginModal />
           </LoginSection>
-        </FormCard>
-        <LoginModal />
-      </Modal>
+        </Modal>
+      </Container>
     </PageLayout>
   );
 }
 
-const FormCard = styled.form`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 28px;

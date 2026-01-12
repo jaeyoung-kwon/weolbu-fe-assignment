@@ -1,6 +1,6 @@
 import { Input, Radio, Text } from '@/shared/components';
 import styled from '@emotion/styled';
-import type { ChangeEvent, FormEvent } from 'react';
+import type { ChangeEvent, FocusEvent, FormEvent } from 'react';
 
 type SignupFormProps = {
   form: {
@@ -10,17 +10,38 @@ type SignupFormProps = {
     password: string;
     role: 'student' | 'instructor';
   };
+  errors: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    password?: string;
+  };
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onChange: (
     key: 'name' | 'email' | 'phone' | 'password' | 'role',
   ) => (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur: (
+    key: 'name' | 'email' | 'phone' | 'password' | 'role',
+  ) => (event: FocusEvent<HTMLInputElement>) => void;
 };
 
-const SignupForm = ({ form, onSubmit, onChange }: SignupFormProps) => {
+const SignupForm = ({
+  form,
+  errors,
+  onSubmit,
+  onChange,
+  onBlur,
+}: SignupFormProps) => {
   return (
     <Form id="signup-form" onSubmit={onSubmit}>
       <FieldGroup delay={60}>
-        <Input label="이름" value={form.name} onChange={onChange('name')} />
+        <Input
+          label="이름"
+          value={form.name}
+          onChange={onChange('name')}
+          onBlur={onBlur('name')}
+          error={errors.name}
+        />
       </FieldGroup>
       <FieldGroup delay={110}>
         <Input
@@ -28,6 +49,8 @@ const SignupForm = ({ form, onSubmit, onChange }: SignupFormProps) => {
           type="email"
           value={form.email}
           onChange={onChange('email')}
+          onBlur={onBlur('email')}
+          error={errors.email}
         />
       </FieldGroup>
       <FieldGroup delay={160}>
@@ -36,6 +59,8 @@ const SignupForm = ({ form, onSubmit, onChange }: SignupFormProps) => {
           type="tel"
           value={form.phone}
           onChange={onChange('phone')}
+          onBlur={onBlur('phone')}
+          error={errors.phone}
         />
       </FieldGroup>
       <FieldGroup delay={210}>
@@ -44,6 +69,8 @@ const SignupForm = ({ form, onSubmit, onChange }: SignupFormProps) => {
           type="password"
           value={form.password}
           onChange={onChange('password')}
+          onBlur={onBlur('password')}
+          error={errors.password}
         />
       </FieldGroup>
       <FieldGroup delay={260}>
