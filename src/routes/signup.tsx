@@ -1,6 +1,6 @@
-import LoginModal from '@/domains/auth/components/LoginModal';
-import { useLoginMutation } from '@/domains/auth/hooks/useLoginMutation';
-import { useSignupMutation } from '@/domains/auth/hooks/useSignupMutation';
+import LoginModal from '@/pages/signup/components/LoginModal';
+import { useLoginMutation } from '@/pages/signup/hooks/useLoginMutation';
+import { useSignupMutation } from '@/pages/signup/hooks/useSignupMutation';
 import { Button, Input, Modal, Radio, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';

@@ -1,5 +1,5 @@
-import CourseCard from '@/domains/course/components/CourseCard';
-import { useEnrollCourseMutation } from '@/domains/course/hooks/useEnrollCourseMutation';
+import CourseCard from '@/pages/home/components/CourseCard';
+import { useEnrollCourseMutation } from '@/pages/home/hooks/useEnrollCourseMutation';
 import { type SortType, courseQuery } from '@/shared/apis/course';
 import { Button, Header, Radio, Text } from '@/shared/components';
 import styled from '@emotion/styled';

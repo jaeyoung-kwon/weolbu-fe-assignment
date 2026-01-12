@@ -1,6 +1,6 @@
-import { useAuth } from '@/domains/auth/contexts/AuthContext';
-import { useCreateCourseMutation } from '@/domains/course/hooks/useCreateCourseMutation';
+import { useCreateCourseMutation } from '@/pages/course-create/hooks/useCreateCourseMutation';
 import { Button, Header, Input } from '@/shared/components';
+import { useAuth } from '@/shared/contexts/auth';
 import styled from '@emotion/styled';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { ChangeEvent, FormEvent } from 'react';

@@ -1,6 +1,6 @@
 import { login } from '@/shared/apis/auth';
+import { useAuth } from '@/shared/contexts/auth';
 import { useMutation } from '@tanstack/react-query';
-import { useAuth } from '../contexts/AuthContext';
 
 export const useLoginMutation = () => {
   const { login: setAuth } = useAuth();
