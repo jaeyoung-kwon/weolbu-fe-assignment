@@ -40,8 +40,7 @@ export const globalStyles = (theme: Theme) => css`
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    outline: 2px solid ${theme.colors.brand.primary};
-    outline-offset: 2px;
+    outline: none;
   }
 
   ul,

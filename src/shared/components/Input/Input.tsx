@@ -63,8 +63,6 @@ const StyledInput = styled.input<{ hasError: boolean }>`
   &:focus {
     border-color: ${({ theme, hasError }) =>
       hasError ? theme.colors.state.danger : theme.colors.brand.primary};
-    box-shadow: ${({ theme, hasError }) =>
-      hasError ? `0 0 0 3px rgba(240, 69, 92, 0.15)` : theme.shadow.focus};
   }
 
   &:disabled {
