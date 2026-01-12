@@ -1,5 +1,6 @@
 import CourseList from '@/pages/home/components/CourseList';
 import CourseSortFilter from '@/pages/home/components/CourseSortFilter';
+import { useCourseSelection } from '@/pages/home/hooks/useCourseSelection';
 import { useEnrollCourseMutation } from '@/pages/home/hooks/useEnrollCourseMutation';
 import { type SortType, courseQuery } from '@/shared/apis/course';
 import { Button, Header, Text } from '@/shared/components';
@@ -15,30 +16,17 @@ export const Route = createFileRoute('/')({
 
 function HomePage() {
   const navigate = useNavigate();
-
   const [sort, setSort] = useState<SortType>('recent');
-  const [isSelectionMode, setIsSelectionMode] = useState(false);
-  const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
+
+  const {
+    isSelectionMode,
+    selectedCourseIds,
+    enterSelectionMode,
+    exitSelectionMode,
+    toggleCourse,
+  } = useCourseSelection();
 
   const { mutate: enrollCourses } = useEnrollCourseMutation();
-
-  const handleEnterSelectionMode = () => {
-    setIsSelectionMode(true);
-    setSelectedCourseIds([]);
-  };
-
-  const handleExitSelectionMode = () => {
-    setIsSelectionMode(false);
-    setSelectedCourseIds([]);
-  };
-
-  const handleToggleCourse = (courseId: number) => {
-    setSelectedCourseIds((prev) =>
-      prev.includes(courseId)
-        ? prev.filter((id) => id !== courseId)
-        : [...prev, courseId],
-    );
-  };
 
   const handleEnrollSelected = () => {
     if (selectedCourseIds.length === 0) {
@@ -48,7 +36,7 @@ function HomePage() {
 
     enrollCourses(
       { courseIds: selectedCourseIds },
-      { onSuccess: handleExitSelectionMode },
+      { onSuccess: exitSelectionMode },
     );
   };
 
@@ -74,12 +62,12 @@ function HomePage() {
             <SuspenseInfiniteQuery
               {...courseQuery.infiniteList({ size: 10, sort })}
             >
-              {(props) => (
+              {({ ...queryResult }) => (
                 <CourseList
                   isSelectionMode={isSelectionMode}
                   selectedCourseIds={selectedCourseIds}
-                  onToggleCourse={handleToggleCourse}
-                  {...props}
+                  onToggleCourse={toggleCourse}
+                  {...queryResult}
                 />
               )}
             </SuspenseInfiniteQuery>
@@ -89,7 +77,7 @@ function HomePage() {
 
       <Footer>
         {!isSelectionMode ? (
-          <EnrollModeButton onClick={handleEnterSelectionMode}>
+          <EnrollModeButton onClick={enterSelectionMode}>
             강의 신청
           </EnrollModeButton>
         ) : (
@@ -98,9 +86,7 @@ function HomePage() {
               {selectedCourseIds.length}개 선택됨
             </Text>
             <ActionButtons>
-              <CancelButton onClick={handleExitSelectionMode}>
-                취소
-              </CancelButton>
+              <CancelButton onClick={exitSelectionMode}>취소</CancelButton>
               <ConfirmButton
                 onClick={handleEnrollSelected}
                 disabled={selectedCourseIds.length === 0}
