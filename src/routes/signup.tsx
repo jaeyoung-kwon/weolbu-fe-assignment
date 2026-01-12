@@ -1,8 +1,9 @@
 import LoginModal from '@/domains/auth/components/LoginModal';
+import { useLoginMutation } from '@/domains/auth/hooks/useLoginMutation';
 import { useSignupMutation } from '@/domains/auth/hooks/useSignupMutation';
 import { Button, Input, Modal, Radio, Text } from '@/shared/components';
 import styled from '@emotion/styled';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 
 export const Route = createFileRoute('/signup')({
@@ -10,6 +11,7 @@ export const Route = createFileRoute('/signup')({
 });
 
 function SignupPage() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '홍길동',
     email: 'hong@weolbu.com',
@@ -18,6 +20,7 @@ function SignupPage() {
     role: 'instructor' as 'student' | 'instructor',
   });
 
+  const { mutate: login } = useLoginMutation();
   const { mutate: signup } = useSignupMutation();
 
   const handleChange =
@@ -28,13 +31,30 @@ function SignupPage() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    signup({
-      email: form.email,
-      password: form.password,
-      name: form.name,
-      phone: form.phone,
-      role: form.role === 'instructor' ? 'INSTRUCTOR' : 'STUDENT',
-    });
+    signup(
+      {
+        email: form.email,
+        password: form.password,
+        name: form.name,
+        phone: form.phone,
+        role: form.role === 'instructor' ? 'INSTRUCTOR' : 'STUDENT',
+      },
+      {
+        onSuccess: () => {
+          login(
+            {
+              email: form.email,
+              password: form.password,
+            },
+            {
+              onSuccess: () => {
+                navigate({ to: '/' });
+              },
+            },
+          );
+        },
+      },
+    );
   };
 
   return (
