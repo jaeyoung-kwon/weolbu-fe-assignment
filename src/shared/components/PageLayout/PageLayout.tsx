@@ -1,19 +1,22 @@
 import styled from '@emotion/styled';
-import type { ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 
-interface LayoutProps {
-  children: ReactNode;
+interface PageLayoutProps {
+  hasFooter?: boolean;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const PageLayout = ({
+  hasFooter,
+  children,
+}: PropsWithChildren<PageLayoutProps>) => {
   return (
     <Page>
-      <Container>{children}</Container>
+      <Container hasFooter={hasFooter}>{children}</Container>
     </Page>
   );
 };
 
-export default Layout;
+export default PageLayout;
 
 const Page = styled.div`
   min-height: 100vh;
@@ -31,12 +34,12 @@ const Page = styled.div`
   overflow: hidden;
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ hasFooter?: boolean }>`
   width: 100%;
   max-width: 480px;
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.background.surface};
   border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
   border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  padding: 24px 16px;
+  padding: ${({ hasFooter }) => (hasFooter ? '24px 16px 84px' : '24px 16px')};
 `;

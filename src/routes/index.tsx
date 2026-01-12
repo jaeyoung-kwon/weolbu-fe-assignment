@@ -3,7 +3,7 @@ import CourseSortFilter from '@/pages/home/components/CourseSortFilter';
 import { useCourseSelection } from '@/pages/home/hooks/useCourseSelection';
 import { useEnrollCourseMutation } from '@/pages/home/hooks/useEnrollCourseMutation';
 import { type SortType, courseQuery } from '@/shared/apis/course';
-import { Button, Header, Text } from '@/shared/components';
+import { Button, Footer, Header, PageLayout, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { ErrorBoundary, Suspense } from '@suspensive/react';
 import { SuspenseInfiniteQuery } from '@suspensive/react-query';
@@ -41,7 +41,7 @@ function HomePage() {
   };
 
   return (
-    <>
+    <PageLayout hasFooter>
       <Header
         title="강의 목록"
         right={
@@ -56,24 +56,22 @@ function HomePage() {
 
       {!isSelectionMode && <CourseSortFilter value={sort} onChange={setSort} />}
 
-      <ContentWrapper>
-        <ErrorBoundary fallback={<CourseList.Error />}>
-          <Suspense fallback={<CourseList.Loading />}>
-            <SuspenseInfiniteQuery
-              {...courseQuery.infiniteList({ size: 10, sort })}
-            >
-              {({ ...queryResult }) => (
-                <CourseList
-                  isSelectionMode={isSelectionMode}
-                  selectedCourseIds={selectedCourseIds}
-                  onToggleCourse={toggleCourse}
-                  {...queryResult}
-                />
-              )}
-            </SuspenseInfiniteQuery>
-          </Suspense>
-        </ErrorBoundary>
-      </ContentWrapper>
+      <ErrorBoundary fallback={<CourseList.Error />}>
+        <Suspense fallback={<CourseList.Loading />}>
+          <SuspenseInfiniteQuery
+            {...courseQuery.infiniteList({ size: 10, sort })}
+          >
+            {({ ...queryResult }) => (
+              <CourseList
+                isSelectionMode={isSelectionMode}
+                selectedCourseIds={selectedCourseIds}
+                onToggleCourse={toggleCourse}
+                {...queryResult}
+              />
+            )}
+          </SuspenseInfiniteQuery>
+        </Suspense>
+      </ErrorBoundary>
 
       <Footer>
         {!isSelectionMode ? (
@@ -97,31 +95,11 @@ function HomePage() {
           </SelectionHeader>
         )}
       </Footer>
-    </>
+    </PageLayout>
   );
 }
 
 const RegisterButton = styled(Button)``;
-
-const ContentWrapper = styled.div`
-  padding-bottom: 40px;
-`;
-
-const Footer = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
-  background-color: ${({ theme }) => theme.colors.background.surface};
-  border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  border-top: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  padding: 16px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-`;
 
 const EnrollModeButton = styled(Button)`
   width: 100%;

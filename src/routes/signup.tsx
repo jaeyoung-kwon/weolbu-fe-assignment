@@ -1,7 +1,14 @@
 import LoginModal from '@/pages/signup/components/LoginModal';
 import { useLoginMutation } from '@/pages/signup/hooks/useLoginMutation';
 import { useSignupMutation } from '@/pages/signup/hooks/useSignupMutation';
-import { Button, Input, Modal, Radio, Text } from '@/shared/components';
+import {
+  Button,
+  Input,
+  Modal,
+  PageLayout,
+  Radio,
+  Text,
+} from '@/shared/components';
 import styled from '@emotion/styled';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
@@ -58,83 +65,85 @@ function SignupPage() {
   };
 
   return (
-    <Modal>
-      <FormCard onSubmit={handleSubmit}>
-        <Header>
-          <AccentBar />
-          <Text as="h1" size="xl" weight="semibold">
-            회원 가입
-          </Text>
-        </Header>
-
-        <Fields>
-          <FieldGroup delay={60}>
-            <Input
-              label="이름"
-              value={form.name}
-              onChange={handleChange('name')}
-            />
-          </FieldGroup>
-          <FieldGroup delay={110}>
-            <Input
-              label="이메일"
-              type="email"
-              value={form.email}
-              onChange={handleChange('email')}
-            />
-          </FieldGroup>
-          <FieldGroup delay={160}>
-            <Input
-              label="휴대폰 번호"
-              type="tel"
-              value={form.phone}
-              onChange={handleChange('phone')}
-            />
-          </FieldGroup>
-          <FieldGroup delay={210}>
-            <Input
-              label="비밀번호"
-              type="password"
-              value={form.password}
-              onChange={handleChange('password')}
-            />
-          </FieldGroup>
-          <FieldGroup delay={260}>
-            <Text size="sm" weight="medium">
-              회원 유형
+    <PageLayout>
+      <Modal>
+        <FormCard onSubmit={handleSubmit}>
+          <Header>
+            <AccentBar />
+            <Text as="h1" size="xl" weight="semibold">
+              회원 가입
             </Text>
-            <RadioGroup>
-              <Radio
-                label="수강생"
-                name="role"
-                value="student"
-                checked={form.role === 'student'}
-                onChange={handleChange('role')}
-              />
-              <Radio
-                label="강사"
-                name="role"
-                value="instructor"
-                checked={form.role === 'instructor'}
-                onChange={handleChange('role')}
-              />
-            </RadioGroup>
-          </FieldGroup>
-        </Fields>
+          </Header>
 
-        <PrimaryButton type="submit">가입하기</PrimaryButton>
+          <Fields>
+            <FieldGroup delay={60}>
+              <Input
+                label="이름"
+                value={form.name}
+                onChange={handleChange('name')}
+              />
+            </FieldGroup>
+            <FieldGroup delay={110}>
+              <Input
+                label="이메일"
+                type="email"
+                value={form.email}
+                onChange={handleChange('email')}
+              />
+            </FieldGroup>
+            <FieldGroup delay={160}>
+              <Input
+                label="휴대폰 번호"
+                type="tel"
+                value={form.phone}
+                onChange={handleChange('phone')}
+              />
+            </FieldGroup>
+            <FieldGroup delay={210}>
+              <Input
+                label="비밀번호"
+                type="password"
+                value={form.password}
+                onChange={handleChange('password')}
+              />
+            </FieldGroup>
+            <FieldGroup delay={260}>
+              <Text size="sm" weight="medium">
+                회원 유형
+              </Text>
+              <RadioGroup>
+                <Radio
+                  label="수강생"
+                  name="role"
+                  value="student"
+                  checked={form.role === 'student'}
+                  onChange={handleChange('role')}
+                />
+                <Radio
+                  label="강사"
+                  name="role"
+                  value="instructor"
+                  checked={form.role === 'instructor'}
+                  onChange={handleChange('role')}
+                />
+              </RadioGroup>
+            </FieldGroup>
+          </Fields>
 
-        <LoginSection>
-          <Text size="sm" color="secondary">
-            이미 회원이신가요?
-          </Text>
-          <Modal.OpenTrigger asChild>
-            <LoginButton variant="outlined">로그인</LoginButton>
-          </Modal.OpenTrigger>
-        </LoginSection>
-      </FormCard>
-      <LoginModal />
-    </Modal>
+          <PrimaryButton type="submit">가입하기</PrimaryButton>
+
+          <LoginSection>
+            <Text size="sm" color="secondary">
+              이미 회원이신가요?
+            </Text>
+            <Modal.OpenTrigger asChild>
+              <LoginButton variant="outlined">로그인</LoginButton>
+            </Modal.OpenTrigger>
+          </LoginSection>
+        </FormCard>
+        <LoginModal />
+      </Modal>
+    </PageLayout>
   );
 }
 

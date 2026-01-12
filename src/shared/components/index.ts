@@ -6,4 +6,5 @@ export { Radio } from './Radio';
 export { Flex } from './Flex';
 export { Modal } from './Modal';
 export { Header } from './Header';
-export { Layout } from './Layout';
+export { PageLayout } from './PageLayout';
+export { Footer } from './Footer';
