@@ -1,7 +1,7 @@
 import CourseDetailInfo from '@/pages/course-detail/components/CourseDetailInfo';
 import CourseDetailTitle from '@/pages/course-detail/components/CourseDetailTitle';
 import { courseQuery } from '@/shared/apis/course';
-import { Button, Footer, Header, PageLayout } from '@/shared/components';
+import { Button, Header, PageLayout } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -41,18 +41,8 @@ function CourseDetailPage() {
         availableSeats={course.availableSeats}
         createdAt={course.createdAt}
       />
-
-      <Footer>
-        <EnrollButton disabled={course.isFull}>
-          {course.isFull ? '수강 마감' : '수강 신청'}
-        </EnrollButton>
-      </Footer>
     </PageLayout>
   );
 }
 
 const BackButton = styled(Button)``;
-
-const EnrollButton = styled(Button)`
-  width: 100%;
-`;
