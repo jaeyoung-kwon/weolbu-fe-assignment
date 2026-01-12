@@ -1,12 +1,13 @@
 import CourseCard from '@/pages/home/components/CourseCard';
 import CourseSortFilter from '@/pages/home/components/CourseSortFilter';
 import { useEnrollCourseMutation } from '@/pages/home/hooks/useEnrollCourseMutation';
+import { useInfiniteScroll } from '@/pages/home/hooks/useInfiniteScroll';
 import { type SortType, courseQuery } from '@/shared/apis/course';
 import { Button, Header, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -30,24 +31,10 @@ function HomePage() {
 
   const { mutate: enrollCourses } = useEnrollCourseMutation();
 
-  const observerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!observerRef.current || !hasNextPage) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    observer.observe(observerRef.current);
-
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const { observerRef } = useInfiniteScroll({
+    enabled: hasNextPage && !isFetchingNextPage,
+    onReachEnd: () => fetchNextPage(),
+  });
 
   if (isLoading) {
     return (
@@ -151,7 +138,7 @@ function HomePage() {
 
       {!isSelectionMode && <CourseSortFilter value={sort} onChange={setSort} />}
 
-      <CourseGrid>
+      <CourseList>
         <Text size="sm" color="secondary">
           총 {totalElements}개의 강의
         </Text>
@@ -164,7 +151,7 @@ function HomePage() {
             onToggle={() => handleToggleCourse(course.id)}
           />
         ))}
-      </CourseGrid>
+      </CourseList>
 
       <ObserverTarget ref={observerRef} />
 
@@ -288,7 +275,7 @@ const ConfirmButton = styled.button`
   }
 `;
 
-const CourseGrid = styled.div`
+const CourseList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
