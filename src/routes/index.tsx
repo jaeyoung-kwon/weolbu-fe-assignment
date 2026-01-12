@@ -1,7 +1,6 @@
-import type { SortType } from '@/domains/course/api/course.api';
-import { courseQuery } from '@/domains/course/api/course.query';
 import CourseCard from '@/domains/course/components/CourseCard';
 import { useEnrollCourseMutation } from '@/domains/course/hooks/useEnrollCourseMutation';
+import { type SortType, courseQuery } from '@/shared/apis/course';
 import { Button, Header, Radio, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useInfiniteQuery } from '@tanstack/react-query';

@@ -1,7 +1,7 @@
+import type { Course } from '@/shared/apis/course';
 import { Checkbox, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useNavigate } from '@tanstack/react-router';
-import type { Course } from '../api/course.type';
 
 interface CourseCardProps {
   course: Course;

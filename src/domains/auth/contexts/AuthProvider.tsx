@@ -1,8 +1,8 @@
 import { useLocalStorageState } from '@/shared/hooks/useLocalStorageState';
 import type { PropsWithChildren } from 'react';
-import type { User } from '../api/auth.type';
 import { AuthContext, type AuthContextValue } from './AuthContext';
 import { ACCESS_TOKEN_KEY, TOKEN_TYPE_KEY } from '@/lib';
+import type { User } from '@/shared/apis/auth';
 
 const USER_KEY = 'user';
 

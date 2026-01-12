@@ -1,4 +1,4 @@
-import { courseQuery } from '@/domains/course/api/course.query';
+import { courseQuery } from '@/shared/apis/course';
 import { Button, Header, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';

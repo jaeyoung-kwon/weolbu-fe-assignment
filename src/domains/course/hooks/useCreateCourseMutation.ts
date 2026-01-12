@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { postCourse } from '@/domains/course/api/course.api';
+import { postCourse } from '@/shared/apis/course';
 
 export const useCreateCourseMutation = () => {
   return useMutation({

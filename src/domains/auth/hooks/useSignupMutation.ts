@@ -1,5 +1,5 @@
+import { signup } from '@/shared/apis/auth';
 import { useMutation } from '@tanstack/react-query';
-import { signup } from '../api/auth.api';
 
 export const useSignupMutation = () => {
   return useMutation({

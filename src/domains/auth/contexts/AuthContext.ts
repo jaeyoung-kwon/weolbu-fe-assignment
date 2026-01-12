@@ -1,5 +1,5 @@
+import type { User } from '@/shared/apis/auth';
 import { createContext, useContext } from 'react';
-import type { User } from '../api/auth.type';
 
 export type AuthContextValue = {
   user: User | null;
