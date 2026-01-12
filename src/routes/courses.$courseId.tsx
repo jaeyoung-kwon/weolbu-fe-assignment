@@ -1,5 +1,5 @@
 import { courseQuery } from '@/domains/course/api/course.query';
-import { Button, Text } from '@/shared/components';
+import { Button, Header, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -25,28 +25,29 @@ function CourseDetailPage() {
     });
   };
 
-  const handleBack = () => {
+  const handleGoBack = () => {
     navigate({ to: '/' });
   };
 
   return (
     <Page>
       <Container>
-        <BackButton onClick={handleBack}>← 목록으로</BackButton>
+        <Header
+          left={
+            <BackButton variant="transparent" onClick={handleGoBack}>
+              ← 뒤로
+            </BackButton>
+          }
+        />
 
-        <Header>
-          <TitleSection>
-            <Text as="h1" size="xl" weight="bold">
-              {course.title}
-            </Text>
-            {course.isFull && <FullBadge>마감</FullBadge>}
-          </TitleSection>
-          <InstructorInfo>
-            <Text size="md" color="secondary">
-              강사: {course.instructorName}
-            </Text>
-          </InstructorInfo>
-        </Header>
+        <TitleSection>
+          <Text as="h1" size="xl" weight="bold">
+            {course.title}
+          </Text>
+          <Text size="md" color="secondary">
+            강사: {course.instructorName}
+          </Text>
+        </TitleSection>
 
         <InfoSection>
           <InfoCard>
@@ -106,51 +107,14 @@ const Container = styled.div`
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
 `;
 
-const BackButton = styled.button`
-  background: none;
-  border: none;
-  color: ${({ theme }) => theme.colors.brand.primary};
-  font-size: ${({ theme }) => theme.typography.size.md};
-  font-weight: ${({ theme }) => theme.typography.weight.medium};
-  cursor: pointer;
-  padding: 8px 0;
-  align-self: flex-start;
-  transition: color 0.2s;
-
-  &:hover {
-    color: ${({ theme }) => theme.colors.brand.primaryStrong};
-  }
-`;
-
-const Header = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border.subtle};
-`;
+const BackButton = styled(Button)``;
 
 const TitleSection = styled.div`
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 12px;
-  flex-wrap: wrap;
-`;
-
-const FullBadge = styled.span`
-  background-color: ${({ theme }) => theme.colors.background.disabled};
-  color: ${({ theme }) => theme.colors.text.disabled};
-  padding: 4px 12px;
-  border-radius: 4px;
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
-`;
-
-const InstructorInfo = styled.div`
-  margin-top: 4px;
 `;
 
 const InfoSection = styled.div`

@@ -1,10 +1,10 @@
-import { Button, Input, Text } from '@/shared/components';
-import styled from '@emotion/styled';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
-import type { ChangeEvent, FormEvent } from 'react';
 import { useAuth } from '@/domains/auth/contexts/AuthContext';
 import { useCreateCourseMutation } from '@/domains/course/hooks/useCreateCourseMutation';
+import { Button, Header, Input } from '@/shared/components';
+import styled from '@emotion/styled';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import type { ChangeEvent, FormEvent } from 'react';
+import { useState } from 'react';
 
 export const Route = createFileRoute('/courses/new')({
   component: CourseNewPage,
@@ -45,14 +45,14 @@ function CourseNewPage() {
   return (
     <Page>
       <Container>
-        <Header>
-          <BackButton variant="transparent" onClick={handleGoBack}>
-            ← 뒤로
-          </BackButton>
-          <Text as="h1" size="xl" weight="bold">
-            강의 등록
-          </Text>
-        </Header>
+        <Header
+          title="강의 등록"
+          left={
+            <BackButton variant="transparent" onClick={handleGoBack}>
+              ← 뒤로
+            </BackButton>
+          }
+        />
 
         <Content>
           <Form onSubmit={handleSubmit}>
@@ -121,18 +121,7 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Header = styled.div`
-  margin-bottom: 24px;
-  text-align: center;
-  position: relative;
-`;
-
-const BackButton = styled(Button)`
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-`;
+const BackButton = styled(Button)``;
 
 const Content = styled.div`
   display: flex;

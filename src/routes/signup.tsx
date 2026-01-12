@@ -13,10 +13,10 @@ export const Route = createFileRoute('/signup')({
 function SignupPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: '홍길동',
-    email: 'hong@weolbu.com',
-    phone: '010-1234-5678',
-    password: 'Text1234',
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
     role: 'instructor' as 'student' | 'instructor',
   });
 
