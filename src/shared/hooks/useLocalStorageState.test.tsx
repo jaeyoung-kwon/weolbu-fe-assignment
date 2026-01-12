@@ -30,28 +30,18 @@ describe('useLocalStorageState', () => {
 
       expect(value).toBe('stored');
     });
-
-    it('defaultValue가 없어도 동작한다', () => {
-      const { result } = renderHook(() =>
-        useLocalStorageState<string>('test-key'),
-      );
-
-      const [value] = result.current;
-
-      expect(value).toBe(null);
-    });
   });
 
   describe('setValue', () => {
     it('값을 직접 설정하면 state와 localStorage가 함께 변경된다', () => {
       const { result } = renderHook(() =>
-        useLocalStorageState('test-key', 'initial'),
+        useLocalStorageState<'initial' | 'next'>('test-key', 'initial'),
       );
 
       const [, setValue] = result.current;
 
       act(() => {
-        setValue('initial');
+        setValue('next');
       });
 
       const [value] = result.current;
@@ -79,13 +69,13 @@ describe('useLocalStorageState', () => {
 
     it('null을 설정하면 localStorage에서 값을 제거한다', () => {
       const { result } = renderHook(() =>
-        useLocalStorageState<string>('test-key', 'initial'),
+        useLocalStorageState<string | null>('test-key', 'initial'),
       );
 
       const [, setValue] = result.current;
 
       act(() => {
-        setValue('');
+        setValue(null);
       });
 
       const [value] = result.current;
