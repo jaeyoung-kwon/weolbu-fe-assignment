@@ -10,7 +10,7 @@ interface ButtonProps extends ComponentProps<'button'> {
 
 const Button = ({ variant = 'filled', children, ...props }: ButtonProps) => {
   return (
-    <StyledButton variant={variant} {...props}>
+    <StyledButton type="button" variant={variant} {...props}>
       {children}
     </StyledButton>
   );

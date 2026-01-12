@@ -51,27 +51,19 @@ function HomePage() {
 
   if (isLoading) {
     return (
-      <Page>
-        <Container>
-          <LoadingWrapper>
-            <Text size="lg">로딩 중...</Text>
-          </LoadingWrapper>
-        </Container>
-      </Page>
+      <LoadingWrapper>
+        <Text size="lg">로딩 중...</Text>
+      </LoadingWrapper>
     );
   }
 
   if (error) {
     return (
-      <Page>
-        <Container>
-          <LoadingWrapper>
-            <Text size="lg" color="secondary">
-              강의 목록을 불러오는데 실패했습니다.
-            </Text>
-          </LoadingWrapper>
-        </Container>
-      </Page>
+      <LoadingWrapper>
+        <Text size="lg" color="secondary">
+          강의 목록을 불러오는데 실패했습니다.
+        </Text>
+      </LoadingWrapper>
     );
   }
 
@@ -80,15 +72,11 @@ function HomePage() {
 
   if (courses.length === 0) {
     return (
-      <Page>
-        <Container>
-          <LoadingWrapper>
-            <Text size="lg" color="secondary">
-              등록된 강의가 없습니다.
-            </Text>
-          </LoadingWrapper>
-        </Container>
-      </Page>
+      <LoadingWrapper>
+        <Text size="lg" color="secondary">
+          등록된 강의가 없습니다.
+        </Text>
+      </LoadingWrapper>
     );
   }
 
@@ -155,68 +143,66 @@ function HomePage() {
   };
 
   return (
-    <Page>
-      <Container hasFooter={true}>
-        <Header
-          title="강의 목록"
-          right={
-            <RegisterButton variant="transparent" onClick={handleGoToNewCourse}>
-              +강의 등록
-            </RegisterButton>
-          }
-        />
+    <>
+      <Header
+        title="강의 목록"
+        right={
+          <RegisterButton variant="transparent" onClick={handleGoToNewCourse}>
+            +강의 등록
+          </RegisterButton>
+        }
+      />
 
-        {!isSelectionMode && (
-          <FilterSection>
-            <Radio
-              label="최근 등록순"
-              name="sort"
-              value="recent"
-              checked={sort === 'recent'}
-              onChange={(e) => handleSortChange(e.target.value)}
-            />
-            <Radio
-              label="신청자 많은순"
-              name="sort"
-              value="popular"
-              checked={sort === 'popular'}
-              onChange={(e) => handleSortChange(e.target.value)}
-            />
-            <Radio
-              label="신청률 높은순"
-              name="sort"
-              value="rate"
-              checked={sort === 'rate'}
-              onChange={(e) => handleSortChange(e.target.value)}
-            />
-          </FilterSection>
-        )}
+      {!isSelectionMode && (
+        <FilterSection>
+          <Radio
+            label="최근 등록순"
+            name="sort"
+            value="recent"
+            checked={sort === 'recent'}
+            onChange={(e) => handleSortChange(e.target.value)}
+          />
+          <Radio
+            label="신청자 많은순"
+            name="sort"
+            value="popular"
+            checked={sort === 'popular'}
+            onChange={(e) => handleSortChange(e.target.value)}
+          />
+          <Radio
+            label="신청률 높은순"
+            name="sort"
+            value="rate"
+            checked={sort === 'rate'}
+            onChange={(e) => handleSortChange(e.target.value)}
+          />
+        </FilterSection>
+      )}
 
-        <CourseGrid>
+      <CourseGrid>
+        <Text size="sm" color="secondary">
+          총 {totalElements}개의 강의
+        </Text>
+        {courses.map((course) => (
+          <CourseCard
+            key={course.id}
+            course={course}
+            isSelectionMode={isSelectionMode}
+            isSelected={selectedCourseIds.includes(course.id)}
+            onToggle={() => handleToggleCourse(course.id)}
+          />
+        ))}
+      </CourseGrid>
+
+      <ObserverTarget ref={observerRef} />
+
+      {isFetchingNextPage && (
+        <LoadingWrapper>
           <Text size="sm" color="secondary">
-            총 {totalElements}개의 강의
+            로딩 중...
           </Text>
-          {courses.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              isSelectionMode={isSelectionMode}
-              isSelected={selectedCourseIds.includes(course.id)}
-              onToggle={() => handleToggleCourse(course.id)}
-            />
-          ))}
-        </CourseGrid>
-
-        <ObserverTarget ref={observerRef} />
-
-        {isFetchingNextPage && (
-          <LoadingWrapper>
-            <Text size="sm" color="secondary">
-              로딩 중...
-            </Text>
-          </LoadingWrapper>
-        )}
-      </Container>
+        </LoadingWrapper>
+      )}
 
       <Footer>
         {!isSelectionMode ? (
@@ -242,27 +228,9 @@ function HomePage() {
           </SelectionHeader>
         )}
       </Footer>
-    </Page>
+    </>
   );
 }
-
-const Page = styled.div`
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.colors.background.canvas};
-`;
-
-const Container = styled.div<{ hasFooter?: boolean }>`
-  width: 100%;
-  max-width: 480px;
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.background.surface};
-  border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  padding: 24px 16px;
-  padding-bottom: ${({ hasFooter }) => (hasFooter ? '100px' : '24px')};
-`;
 
 const RegisterButton = styled(Button)``;
 

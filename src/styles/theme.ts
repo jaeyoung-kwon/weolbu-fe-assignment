@@ -1,4 +1,4 @@
-import '@emotion/react'
+import '@emotion/react';
 
 const neutralScale = {
   0: '#ffffff',
@@ -12,7 +12,7 @@ const neutralScale = {
   700: '#4b5267',
   800: '#2f3442',
   900: '#1d2030',
-} as const
+} as const;
 
 export const theme = {
   colors: {
@@ -89,9 +89,9 @@ export const theme = {
     modal: 1000,
     toast: 9000,
   },
-} as const
+} as const;
 
-export type AppTheme = typeof theme
+export type AppTheme = typeof theme;
 
 declare module '@emotion/react' {
   export interface Theme extends AppTheme {}

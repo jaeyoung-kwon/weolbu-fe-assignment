@@ -43,83 +43,62 @@ function CourseNewPage() {
   };
 
   return (
-    <Page>
-      <Container>
-        <Header
-          title="강의 등록"
-          left={
-            <BackButton variant="transparent" onClick={handleGoBack}>
-              ← 뒤로
-            </BackButton>
-          }
-        />
+    <>
+      <Header
+        title="강의 등록"
+        left={
+          <BackButton variant="transparent" onClick={handleGoBack}>
+            ← 뒤로
+          </BackButton>
+        }
+      />
 
-        <Content>
-          <Form onSubmit={handleSubmit}>
-            <Fields>
-              <Input
-                label="강의명"
-                placeholder="강의명을 입력하세요"
-                value={form.title}
-                onChange={handleChange('title')}
-                required
-              />
-              <Input
-                label="강의 설명"
-                placeholder="강의 설명을 입력하세요"
-                value={form.description}
-                onChange={handleChange('description')}
-                required
-              />
-              <Input
-                label="수강인원"
-                type="number"
-                min={1}
-                placeholder="수강 인원을 입력하세요"
-                value={form.capacity}
-                onChange={handleChange('capacity')}
-                required
-              />
-              <Input
-                label="가격"
-                type="number"
-                min={0}
-                placeholder="가격을 입력하세요"
-                value={form.price}
-                onChange={handleChange('price')}
-                required
-              />
-            </Fields>
-            <Footer>
-              <SubmitButton type="submit" disabled={isPending}>
-                {isPending ? '등록 중...' : '등록하기'}
-              </SubmitButton>
-            </Footer>
-          </Form>
-        </Content>
-      </Container>
-    </Page>
+      <Content>
+        <Form onSubmit={handleSubmit}>
+          <Fields>
+            <Input
+              label="강의명"
+              placeholder="강의명을 입력하세요"
+              value={form.title}
+              onChange={handleChange('title')}
+              required
+            />
+            <Input
+              label="강의 설명"
+              placeholder="강의 설명을 입력하세요"
+              value={form.description}
+              onChange={handleChange('description')}
+              required
+            />
+            <Input
+              label="수강인원"
+              type="number"
+              min={1}
+              placeholder="수강 인원을 입력하세요"
+              value={form.capacity}
+              onChange={handleChange('capacity')}
+              required
+            />
+            <Input
+              label="가격"
+              type="number"
+              min={0}
+              placeholder="가격을 입력하세요"
+              value={form.price}
+              onChange={handleChange('price')}
+              required
+            />
+          </Fields>
+          <Footer>
+            <SubmitButton type="submit" disabled={isPending}>
+              {isPending ? '등록 중...' : '등록하기'}
+            </SubmitButton>
+          </Footer>
+        </Form>
+      </Content>
+    </>
   );
 }
-
-const Page = styled.div`
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.colors.background.canvas};
-`;
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 480px;
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.background.surface};
-  border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  padding: 24px 16px;
-  display: flex;
-  flex-direction: column;
-`;
 
 const BackButton = styled(Button)``;
 

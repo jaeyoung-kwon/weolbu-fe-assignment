@@ -30,84 +30,63 @@ function CourseDetailPage() {
   };
 
   return (
-    <Page>
-      <Container>
-        <Header
-          left={
-            <BackButton variant="transparent" onClick={handleGoBack}>
-              ← 뒤로
-            </BackButton>
-          }
-        />
+    <>
+      <Header
+        left={
+          <BackButton variant="transparent" onClick={handleGoBack}>
+            ← 뒤로
+          </BackButton>
+        }
+      />
 
-        <TitleSection>
-          <Text as="h1" size="xl" weight="bold">
-            {course.title}
-          </Text>
-          <Text size="md" color="secondary">
-            강사: {course.instructorName}
-          </Text>
-        </TitleSection>
+      <TitleSection>
+        <Text as="h1" size="xl" weight="bold">
+          {course.title}
+        </Text>
+        <Text size="md" color="secondary">
+          강사: {course.instructorName}
+        </Text>
+      </TitleSection>
 
-        <InfoSection>
-          <InfoCard>
-            <InfoLabel>수강료</InfoLabel>
-            <PriceText size="xl" weight="bold">
-              {formatPrice(course.price)}원
-            </PriceText>
-          </InfoCard>
+      <InfoSection>
+        <InfoCard>
+          <InfoLabel>수강료</InfoLabel>
+          <PriceText size="xl" weight="bold">
+            {formatPrice(course.price)}원
+          </PriceText>
+        </InfoCard>
 
-          <InfoCard>
-            <InfoLabel>수강 인원</InfoLabel>
-            <InfoValue>
-              {course.currentStudents} / {course.maxStudents}명
-            </InfoValue>
-            {course.availableSeats > 0 && (
-              <AvailableSeats>잔여 {course.availableSeats}석</AvailableSeats>
-            )}
-          </InfoCard>
+        <InfoCard>
+          <InfoLabel>수강 인원</InfoLabel>
+          <InfoValue>
+            {course.currentStudents} / {course.maxStudents}명
+          </InfoValue>
+          {course.availableSeats > 0 && (
+            <AvailableSeats>잔여 {course.availableSeats}석</AvailableSeats>
+          )}
+        </InfoCard>
 
-          <InfoCard>
-            <InfoLabel>등록일</InfoLabel>
-            <InfoValue>{formatDate(course.createdAt)}</InfoValue>
-          </InfoCard>
-        </InfoSection>
+        <InfoCard>
+          <InfoLabel>등록일</InfoLabel>
+          <InfoValue>{formatDate(course.createdAt)}</InfoValue>
+        </InfoCard>
+      </InfoSection>
 
-        <DescriptionSection>
-          <Text size="lg" weight="semibold">
-            강의 설명
-          </Text>
-          <DescriptionText>{course.description}</DescriptionText>
-        </DescriptionSection>
+      <DescriptionSection>
+        <Text size="lg" weight="semibold">
+          강의 설명
+        </Text>
+        <DescriptionText>{course.description}</DescriptionText>
+      </DescriptionSection>
 
-        <ActionSection>
-          <EnrollButton disabled={course.isFull}>
-            {course.isFull ? '수강 마감' : '수강 신청'}
-          </EnrollButton>
-        </ActionSection>
-      </Container>
-    </Page>
+      <ActionSection>
+        <EnrollButton disabled={course.isFull}>
+          {course.isFull ? '수강 마감' : '수강 신청'}
+        </EnrollButton>
+      </ActionSection>
+    </>
   );
 }
-
-const Page = styled.div`
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.colors.background.canvas};
-`;
-
-const Container = styled.div`
-  width: 100%;
-  max-width: 480px;
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.background.surface};
-  border-left: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  border-right: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  padding: 24px 16px;
-  display: flex;
-  flex-direction: column;
-`;
 
 const BackButton = styled(Button)``;
 
