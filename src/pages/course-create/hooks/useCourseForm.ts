@@ -1,6 +1,13 @@
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 
+const INIT_FORM_VALUES = {
+  title: '',
+  description: '',
+  capacity: '',
+  price: '',
+};
+
 interface CourseFormData {
   title: string;
   description: string;
@@ -9,12 +16,7 @@ interface CourseFormData {
 }
 
 export const useCourseForm = () => {
-  const [form, setForm] = useState<CourseFormData>({
-    title: '',
-    description: '',
-    capacity: '',
-    price: '',
-  });
+  const [form, setForm] = useState<CourseFormData>(INIT_FORM_VALUES);
 
   const handleChange =
     (key: keyof CourseFormData) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -22,12 +24,7 @@ export const useCourseForm = () => {
     };
 
   const resetForm = () => {
-    setForm({
-      title: '',
-      description: '',
-      capacity: '',
-      price: '',
-    });
+    setForm(INIT_FORM_VALUES);
   };
 
   return {

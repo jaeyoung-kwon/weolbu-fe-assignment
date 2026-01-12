@@ -1,40 +1,22 @@
 import LoginModal from '@/pages/signup/components/LoginModal';
+import SignupForm from '@/pages/signup/components/SignupForm';
 import { useLoginMutation } from '@/pages/signup/hooks/useLoginMutation';
+import { useSignupForm } from '@/pages/signup/hooks/useSignupForm';
 import { useSignupMutation } from '@/pages/signup/hooks/useSignupMutation';
-import {
-  Button,
-  Input,
-  Modal,
-  PageLayout,
-  Radio,
-  Text,
-} from '@/shared/components';
+import { Button, Modal, PageLayout, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { createFileRoute } from '@tanstack/react-router';
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { type FormEvent } from 'react';
 
 export const Route = createFileRoute('/_public/signup')({
   component: SignupPage,
 });
 
-const INITIAL_FORM_VALUES = {
-  name: '',
-  email: '',
-  phone: '',
-  password: '',
-  role: 'instructor' as 'student' | 'instructor',
-};
-
 function SignupPage() {
-  const [form, setForm] = useState(INITIAL_FORM_VALUES);
+  const { form, handleChange } = useSignupForm();
 
   const { mutate: login } = useLoginMutation();
   const { mutate: signup } = useSignupMutation();
-
-  const handleChange =
-    (key: keyof typeof form) => (event: ChangeEvent<HTMLInputElement>) => {
-      setForm((prev) => ({ ...prev, [key]: event.target.value }));
-    };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -69,62 +51,15 @@ function SignupPage() {
             </Text>
           </Header>
 
-          <Fields>
-            <FieldGroup delay={60}>
-              <Input
-                label="이름"
-                value={form.name}
-                onChange={handleChange('name')}
-              />
-            </FieldGroup>
-            <FieldGroup delay={110}>
-              <Input
-                label="이메일"
-                type="email"
-                value={form.email}
-                onChange={handleChange('email')}
-              />
-            </FieldGroup>
-            <FieldGroup delay={160}>
-              <Input
-                label="휴대폰 번호"
-                type="tel"
-                value={form.phone}
-                onChange={handleChange('phone')}
-              />
-            </FieldGroup>
-            <FieldGroup delay={210}>
-              <Input
-                label="비밀번호"
-                type="password"
-                value={form.password}
-                onChange={handleChange('password')}
-              />
-            </FieldGroup>
-            <FieldGroup delay={260}>
-              <Text size="sm" weight="medium">
-                회원 유형
-              </Text>
-              <RadioGroup>
-                <Radio
-                  label="수강생"
-                  name="role"
-                  value="student"
-                  checked={form.role === 'student'}
-                  onChange={handleChange('role')}
-                />
-                <Radio
-                  label="강사"
-                  name="role"
-                  value="instructor"
-                  checked={form.role === 'instructor'}
-                  onChange={handleChange('role')}
-                />
-              </RadioGroup>
-            </FieldGroup>
-          </Fields>
+          <SignupForm
+            form={form}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+          />
 
-          <PrimaryButton type="submit">가입하기</PrimaryButton>
+          <PrimaryButton type="submit" form="signup-form">
+            가입하기
+          </PrimaryButton>
 
           <LoginSection>
             <Text size="sm" color="secondary">
@@ -162,37 +97,6 @@ const AccentBar = styled.div`
     ${({ theme }) => theme.colors.brand.primary},
     #8fa3ff
   );
-`;
-
-const Fields = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const FieldGroup = styled.div<{ delay: number }>`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  animation: fadeIn 0.4s ease-out;
-  animation-delay: ${({ delay }) => delay}ms;
-  animation-fill-mode: both;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-`;
-
-const RadioGroup = styled.div`
-  display: flex;
-  gap: 24px;
 `;
 
 const PrimaryButton = styled(Button)`
