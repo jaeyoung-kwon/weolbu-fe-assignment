@@ -1,73 +1,190 @@
-# React + TypeScript + Vite
+# 월급쟁이부자들 FE 과제
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 모바일 웹 기반 강의 플랫폼 (회원가입, 강의 등록, 강의 조회/수강 신청)
 
-Currently, two official plugins are available:
+## 🎯 핵심 포인트
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### ✅ 타입 안전성과 가드 중심 설계
 
-## React Compiler
+- TypeScript `strict` 모드 활성화
+- TanStack Router 파일 라우팅 + `AuthGuard`/`RoleGuard`로 권한 제어
+- API 요청/응답 타입 정의 (`src/shared/apis`)
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+### ✅ 사용자 흐름에 맞춘 화면 구성
 
-## Expanding the ESLint configuration
+- 회원가입/로그인 → 강의 목록 → 강의 상세/등록
+- 강의 목록: 정렬 3종 + 무한 스크롤 + 다중 선택 수강 신청
+- 강의 등록: 강사 전용 접근
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📋 프로젝트 개요
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+모바일 웹 기준의 강의 플랫폼으로, 회원 가입과 강의 등록/조회/수강 신청 흐름을 구현했습니다.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+### 주요 기능
+
+- **회원 가입/로그인** - 실시간 입력 파서/검증 + 가입 후 목록 이동
+- **강의 등록** - 강사 전용 폼 + 입력값 검증
+- **강의 목록** - 무한 스크롤 + 정렬 (최근/신청자/신청률)
+- **수강 신청** - 다중 선택 후 Batch API로 신청
+- **강의 상세** - 개별 강의 정보 조회
+
+---
+
+## 🧩 구현 하이라이트
+
+### 1. 무한 스크롤 훅
+
+`IntersectionObserver` 기반으로 안전한 연속 호출을 방지합니다.
+
+```ts
+const { observerRef } = useInfiniteScroll({
+  enabled: hasNextPage && !isFetchingNextPage,
+  onReachEnd: () => fetchNextPage(),
+});
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. 배치 수강 신청 + 결과 피드백
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+Batch API 응답을 성공/실패로 분리해 사용자에게 상세 메시지를 제공합니다.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```ts
+const { mutate: enrollCourses } = useEnrollCourseMutation();
+enrollCourses({ courseIds: selectedCourseIds });
 ```
+
+### 3. 공통 Fetcher + 에러 표준화
+
+`fetcher`가 인증 헤더와 에러 파싱을 책임집니다.
+
+```ts
+export const fetcher = {
+  get: async <TResponse>({ path, query }: FetcherOptions<never>) =>
+    request<never, TResponse>({ path, query, method: 'GET' }),
+};
+```
+
+---
+
+## 📁 프로젝트 구조
+
+```
+src/
+├── routes/                    # TanStack Router 파일 라우트
+│   ├── __root.tsx
+│   ├── _public.tsx
+│   ├── _protected.tsx
+│   └── _protected/_instructor.tsx
+│
+├── pages/                     # 화면 단위 구성
+│   ├── home/                  # 강의 목록 + 신청
+│   ├── signup/                # 회원가입/로그인
+│   ├── course-create/         # 강의 등록
+│   └── course-detail/         # 강의 상세
+│
+├── shared/
+│   ├── apis/                  # API 타입/요청
+│   ├── components/            # 공통 UI 컴포넌트
+│   ├── contexts/              # AuthContext/Provider
+│   ├── hooks/                 # useScrollLock, useClickOutsideRef 등
+│   └── utils/                 # format, localStorage 유틸
+│
+├── lib/                       # fetcher, react-query 설정
+├── styles/                    # theme, global styles
+├── main.tsx
+└── routeTree.gen.ts           # TanStack Router 생성 파일 (수정 금지)
+```
+
+---
+
+## 🛠 기술 스택
+
+### Core
+
+- React 19
+- Vite 7
+- TypeScript
+
+### State / Routing / Styling
+
+- TanStack Query v5
+- TanStack Router
+- Emotion (Theme + Styled)
+
+### Testing & Quality
+
+- Vitest
+- Testing Library
+- ESLint / Stylelint / Prettier
+
+---
+
+## 🚀 시작하기
+
+```bash
+# 의존성 설치
+pnpm install
+
+# 개발 서버 실행
+pnpm dev
+
+# 빌드
+pnpm build
+
+# 테스트 실행
+pnpm test
+
+# 린트
+pnpm lint
+pnpm stylelint
+
+# 자동 수정
+pnpm lint:fix
+pnpm stylelint:fix
+```
+
+### 환경 설정
+
+- API Base URL: `http://localhost:8080/api`
+- 수정 위치: `src/lib/fetcher/fetcher.ts`
+
+---
+
+## ✅ 테스트 현황
+
+### 테스트 파일
+
+공통 훅, 유틸 함수, 그리고 필요한 폼 관련 훅까지 테스트 코드를 작성해 핵심 로직을 안정적으로 검증했습니다.
+
+- `src/pages/course-create/useCourseForm.test.ts`
+- `src/pages/signup/hooks/useSignupForm.test.ts`
+- `src/pages/signup/hooks/useLoginForm.test.ts`
+- `src/shared/hooks/useClickOutsideRef.test.tsx`
+- `src/shared/hooks/useScrollLock.test.tsx`
+- `src/shared/hooks/useLocalStorageState.test.tsx`
+- `src/shared/utils/format.test.ts`
+- `src/shared/utils/localStorage.test.ts`
+- `src/pages/signup/utils/validator.test.ts`
+- `src/pages/signup/utils/parser.test.ts`
+- `src/pages/course-create/utils/validator.test.ts`
+- `src/pages/course-create/utils/parser.test.ts`
+
+---
+
+## 🔐 API 연동
+
+| Method | Endpoint                 | 설명                     |
+| ------ | ------------------------ | ------------------------ |
+| POST   | `/api/users/signup`      | 회원가입                 |
+| POST   | `/api/users/login`       | 로그인                   |
+| GET    | `/api/courses`           | 강의 목록 (페이지네이션) |
+| GET    | `/api/courses/:id`       | 강의 상세                |
+| POST   | `/api/courses`           | 강의 등록                |
+| POST   | `/api/enrollments/batch` | 다중 수강 신청           |
+
+---
+
+## 📚 참고 문서
+
+- [REQUIREMENTS.md](./docs/REQUIREMENTS.md)
