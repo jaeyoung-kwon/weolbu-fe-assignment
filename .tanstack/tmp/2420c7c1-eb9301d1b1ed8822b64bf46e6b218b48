@@ -9,15 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PublicRouteImport } from './routes/_public'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
-import { Route as PublicSignupRouteImport } from './routes/_public/signup'
 import { Route as ProtectedCoursesNewRouteImport } from './routes/_protected/courses.new'
 import { Route as ProtectedCoursesCourseIdRouteImport } from './routes/_protected/courses.$courseId'
 
-const PublicRoute = PublicRouteImport.update({
-  id: '/_public',
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProtectedRoute = ProtectedRouteImport.update({
@@ -28,11 +28,6 @@ const ProtectedIndexRoute = ProtectedIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ProtectedRoute,
-} as any)
-const PublicSignupRoute = PublicSignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => PublicRoute,
 } as any)
 const ProtectedCoursesNewRoute = ProtectedCoursesNewRouteImport.update({
   id: '/courses/new',
@@ -47,13 +42,13 @@ const ProtectedCoursesCourseIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/signup': typeof PublicSignupRoute
+  '/signup': typeof SignupRoute
   '/': typeof ProtectedIndexRoute
   '/courses/$courseId': typeof ProtectedCoursesCourseIdRoute
   '/courses/new': typeof ProtectedCoursesNewRoute
 }
 export interface FileRoutesByTo {
-  '/signup': typeof PublicSignupRoute
+  '/signup': typeof SignupRoute
   '/': typeof ProtectedIndexRoute
   '/courses/$courseId': typeof ProtectedCoursesCourseIdRoute
   '/courses/new': typeof ProtectedCoursesNewRoute
@@ -61,8 +56,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteWithChildren
-  '/_public': typeof PublicRouteWithChildren
-  '/_public/signup': typeof PublicSignupRoute
+  '/signup': typeof SignupRoute
   '/_protected/': typeof ProtectedIndexRoute
   '/_protected/courses/$courseId': typeof ProtectedCoursesCourseIdRoute
   '/_protected/courses/new': typeof ProtectedCoursesNewRoute
@@ -75,8 +69,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_protected'
-    | '/_public'
-    | '/_public/signup'
+    | '/signup'
     | '/_protected/'
     | '/_protected/courses/$courseId'
     | '/_protected/courses/new'
@@ -84,16 +77,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   ProtectedRoute: typeof ProtectedRouteWithChildren
-  PublicRoute: typeof PublicRouteWithChildren
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_public': {
-      id: '/_public'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof PublicRouteImport
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_protected': {
@@ -109,13 +102,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof ProtectedIndexRouteImport
       parentRoute: typeof ProtectedRoute
-    }
-    '/_public/signup': {
-      id: '/_public/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof PublicSignupRouteImport
-      parentRoute: typeof PublicRoute
     }
     '/_protected/courses/new': {
       id: '/_protected/courses/new'
@@ -150,20 +136,9 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
   ProtectedRouteChildren,
 )
 
-interface PublicRouteChildren {
-  PublicSignupRoute: typeof PublicSignupRoute
-}
-
-const PublicRouteChildren: PublicRouteChildren = {
-  PublicSignupRoute: PublicSignupRoute,
-}
-
-const PublicRouteWithChildren =
-  PublicRoute._addFileChildren(PublicRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   ProtectedRoute: ProtectedRouteWithChildren,
-  PublicRoute: PublicRouteWithChildren,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

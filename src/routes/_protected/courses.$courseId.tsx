@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/courses/$courseId')({
+export const Route = createFileRoute('/_protected/courses/$courseId')({
   component: CourseDetailPage,
 });
 

@@ -10,7 +10,7 @@ import { SuspenseInfiniteQuery } from '@suspensive/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_protected/')({
   component: HomePage,
 });
 
@@ -84,7 +84,9 @@ function HomePage() {
               {selectedCourseIds.length}개 선택됨
             </Text>
             <ActionButtons>
-              <CancelButton onClick={exitSelectionMode}>취소</CancelButton>
+              <CancelButton variant="outlined" onClick={exitSelectionMode}>
+                취소
+              </CancelButton>
               <ConfirmButton
                 onClick={handleEnrollSelected}
                 disabled={selectedCourseIds.length === 0}
@@ -117,39 +119,6 @@ const ActionButtons = styled.div`
   gap: 8px;
 `;
 
-const CancelButton = styled.button`
-  padding: 8px 16px;
-  background-color: ${({ theme }) => theme.colors.background.surface};
-  color: ${({ theme }) => theme.colors.text.primary};
-  border: 1px solid ${({ theme }) => theme.colors.border.subtle};
-  border-radius: 6px;
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.medium};
-  cursor: pointer;
-  transition: background-color 0.2s;
+const CancelButton = styled(Button)``;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.background.canvas};
-  }
-`;
-
-const ConfirmButton = styled.button`
-  padding: 8px 16px;
-  background-color: ${({ theme }) => theme.colors.brand.primary};
-  color: ${({ theme }) => theme.colors.text.inverse};
-  border: none;
-  border-radius: 6px;
-  font-size: ${({ theme }) => theme.typography.size.sm};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover:not(:disabled) {
-    background-color: ${({ theme }) => theme.colors.brand.primaryStrong};
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-`;
+const ConfirmButton = styled(Button)``;

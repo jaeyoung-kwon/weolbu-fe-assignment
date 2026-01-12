@@ -8,3 +8,4 @@ export { Modal } from './Modal';
 export { Header } from './Header';
 export { PageLayout } from './PageLayout';
 export { Footer } from './Footer';
+export { AuthGuard } from './AuthGuard';

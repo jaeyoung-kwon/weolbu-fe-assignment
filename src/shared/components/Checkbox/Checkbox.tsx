@@ -55,7 +55,6 @@ const CheckIcon = styled.svg`
   stroke-linecap: round;
   stroke-linejoin: round;
   opacity: 0;
-  transition: opacity 0.2s ease-in-out;
 `;
 
 const StyledCheckbox = styled.div<{ hasError: boolean; disabled?: boolean }>`
@@ -70,10 +69,7 @@ const StyledCheckbox = styled.div<{ hasError: boolean; disabled?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition:
-    background-color 0.2s ease-in-out,
-    border-color 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
+
   flex-shrink: 0;
 
   ${HiddenCheckbox}:checked + & {

@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import type { FormEvent } from 'react';
 
-export const Route = createFileRoute('/courses/new')({
+export const Route = createFileRoute('/_protected/courses/new')({
   component: CourseNewPage,
 });
 

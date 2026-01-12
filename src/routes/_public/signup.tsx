@@ -10,22 +10,23 @@ import {
   Text,
 } from '@/shared/components';
 import styled from '@emotion/styled';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 
-export const Route = createFileRoute('/signup')({
+export const Route = createFileRoute('/_public/signup')({
   component: SignupPage,
 });
 
+const INITIAL_FORM_VALUES = {
+  name: '',
+  email: '',
+  phone: '',
+  password: '',
+  role: 'instructor' as 'student' | 'instructor',
+};
+
 function SignupPage() {
-  const navigate = useNavigate();
-  const [form, setForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    role: 'instructor' as 'student' | 'instructor',
-  });
+  const [form, setForm] = useState(INITIAL_FORM_VALUES);
 
   const { mutate: login } = useLoginMutation();
   const { mutate: signup } = useSignupMutation();
@@ -48,17 +49,10 @@ function SignupPage() {
       },
       {
         onSuccess: () => {
-          login(
-            {
-              email: form.email,
-              password: form.password,
-            },
-            {
-              onSuccess: () => {
-                navigate({ to: '/' });
-              },
-            },
-          );
+          login({
+            email: form.email,
+            password: form.password,
+          });
         },
       },
     );
