@@ -1,7 +1,8 @@
 import CourseCard from '@/pages/home/components/CourseCard';
+import CourseSortFilter from '@/pages/home/components/CourseSortFilter';
 import { useEnrollCourseMutation } from '@/pages/home/hooks/useEnrollCourseMutation';
 import { type SortType, courseQuery } from '@/shared/apis/course';
-import { Button, Header, Radio, Text } from '@/shared/components';
+import { Button, Header, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -79,10 +80,6 @@ function HomePage() {
     );
   }
 
-  const handleSortChange = (value: string) => {
-    setSort(value as SortType);
-  };
-
   const handleEnterSelectionMode = () => {
     setIsSelectionMode(true);
     setSelectedCourseIds([]);
@@ -152,31 +149,7 @@ function HomePage() {
         }
       />
 
-      {!isSelectionMode && (
-        <FilterSection>
-          <Radio
-            label="최근 등록순"
-            name="sort"
-            value="recent"
-            checked={sort === 'recent'}
-            onChange={(e) => handleSortChange(e.target.value)}
-          />
-          <Radio
-            label="신청자 많은순"
-            name="sort"
-            value="popular"
-            checked={sort === 'popular'}
-            onChange={(e) => handleSortChange(e.target.value)}
-          />
-          <Radio
-            label="신청률 높은순"
-            name="sort"
-            value="rate"
-            checked={sort === 'rate'}
-            onChange={(e) => handleSortChange(e.target.value)}
-          />
-        </FilterSection>
-      )}
+      {!isSelectionMode && <CourseSortFilter value={sort} onChange={setSort} />}
 
       <CourseGrid>
         <Text size="sm" color="secondary">
@@ -233,19 +206,11 @@ function HomePage() {
 
 const RegisterButton = styled(Button)``;
 
-const FilterSection = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px;
-  background-color: ${({ theme }) => theme.colors.background.canvas};
-  border-radius: 8px;
-  margin-bottom: 16px;
-`;
-
 const Footer = styled.div`
   position: fixed;
   bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   max-width: 480px;
   background-color: ${({ theme }) => theme.colors.background.surface};

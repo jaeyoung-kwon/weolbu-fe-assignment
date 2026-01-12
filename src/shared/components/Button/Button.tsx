@@ -57,7 +57,7 @@ const StyledButton = styled.button<{ variant: ButtonVariant }>`
     if (variant === 'transparent') {
       return css`
         background-color: transparent;
-        color: ${theme.colors.text.primary};
+        color: ${theme.colors.brand.primary};
         border-color: transparent;
         padding: 8px 12px;
 
