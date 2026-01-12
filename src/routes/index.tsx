@@ -1,11 +1,11 @@
-import CourseCard from '@/pages/home/components/CourseCard';
+import CourseList from '@/pages/home/components/CourseList';
 import CourseSortFilter from '@/pages/home/components/CourseSortFilter';
 import { useEnrollCourseMutation } from '@/pages/home/hooks/useEnrollCourseMutation';
-import { useInfiniteScroll } from '@/pages/home/hooks/useInfiniteScroll';
 import { type SortType, courseQuery } from '@/shared/apis/course';
 import { Button, Header, Text } from '@/shared/components';
 import styled from '@emotion/styled';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { ErrorBoundary, Suspense } from '@suspensive/react';
+import { SuspenseInfiniteQuery } from '@suspensive/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
@@ -15,57 +15,12 @@ export const Route = createFileRoute('/')({
 
 function HomePage() {
   const navigate = useNavigate();
+
   const [sort, setSort] = useState<SortType>('recent');
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>([]);
 
-  const {
-    data,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    refetch,
-  } = useInfiniteQuery(courseQuery.infiniteList({ size: 10, sort }));
-
   const { mutate: enrollCourses } = useEnrollCourseMutation();
-
-  const { observerRef } = useInfiniteScroll({
-    enabled: hasNextPage && !isFetchingNextPage,
-    onReachEnd: () => fetchNextPage(),
-  });
-
-  if (isLoading) {
-    return (
-      <LoadingWrapper>
-        <Text size="lg">로딩 중...</Text>
-      </LoadingWrapper>
-    );
-  }
-
-  if (error) {
-    return (
-      <LoadingWrapper>
-        <Text size="lg" color="secondary">
-          강의 목록을 불러오는데 실패했습니다.
-        </Text>
-      </LoadingWrapper>
-    );
-  }
-
-  const totalElements = data?.pages[0]?.totalElements ?? 0;
-  const courses = data?.pages.flatMap((page) => page.content) ?? [];
-
-  if (courses.length === 0) {
-    return (
-      <LoadingWrapper>
-        <Text size="lg" color="secondary">
-          등록된 강의가 없습니다.
-        </Text>
-      </LoadingWrapper>
-    );
-  }
 
   const handleEnterSelectionMode = () => {
     setIsSelectionMode(true);
@@ -93,36 +48,8 @@ function HomePage() {
 
     enrollCourses(
       { courseIds: selectedCourseIds },
-      {
-        onSuccess: (response) => {
-          const successCount = response.success.length;
-          const failedCount = response.failed.length;
-
-          let message = '';
-          if (successCount > 0) {
-            message += `${successCount}개의 강의 신청에 성공했습니다.`;
-          }
-          if (failedCount > 0) {
-            message += `\n\n${failedCount}개의 강의 신청에 실패했습니다:\n`;
-            response.failed.forEach((failure) => {
-              message += `- ${failure.reason}\n`;
-            });
-          }
-
-          alert(message);
-          handleExitSelectionMode();
-          refetch();
-        },
-        onError: (error) => {
-          alert('수강 신청 중 오류가 발생했습니다.');
-          console.error('Enrollment error:', error);
-        },
-      },
+      { onSuccess: handleExitSelectionMode },
     );
-  };
-
-  const handleGoToNewCourse = () => {
-    navigate({ to: '/courses/new' });
   };
 
   return (
@@ -130,7 +57,10 @@ function HomePage() {
       <Header
         title="강의 목록"
         right={
-          <RegisterButton variant="transparent" onClick={handleGoToNewCourse}>
+          <RegisterButton
+            variant="transparent"
+            onClick={() => navigate({ to: '/courses/new' })}
+          >
             +강의 등록
           </RegisterButton>
         }
@@ -138,30 +68,24 @@ function HomePage() {
 
       {!isSelectionMode && <CourseSortFilter value={sort} onChange={setSort} />}
 
-      <CourseList>
-        <Text size="sm" color="secondary">
-          총 {totalElements}개의 강의
-        </Text>
-        {courses.map((course) => (
-          <CourseCard
-            key={course.id}
-            course={course}
-            isSelectionMode={isSelectionMode}
-            isSelected={selectedCourseIds.includes(course.id)}
-            onToggle={() => handleToggleCourse(course.id)}
-          />
-        ))}
-      </CourseList>
-
-      <ObserverTarget ref={observerRef} />
-
-      {isFetchingNextPage && (
-        <LoadingWrapper>
-          <Text size="sm" color="secondary">
-            로딩 중...
-          </Text>
-        </LoadingWrapper>
-      )}
+      <ContentWrapper>
+        <ErrorBoundary fallback={<CourseList.Error />}>
+          <Suspense fallback={<CourseList.Loading />}>
+            <SuspenseInfiniteQuery
+              {...courseQuery.infiniteList({ size: 10, sort })}
+            >
+              {(props) => (
+                <CourseList
+                  isSelectionMode={isSelectionMode}
+                  selectedCourseIds={selectedCourseIds}
+                  onToggleCourse={handleToggleCourse}
+                  {...props}
+                />
+              )}
+            </SuspenseInfiniteQuery>
+          </Suspense>
+        </ErrorBoundary>
+      </ContentWrapper>
 
       <Footer>
         {!isSelectionMode ? (
@@ -193,6 +117,10 @@ function HomePage() {
 
 const RegisterButton = styled(Button)``;
 
+const ContentWrapper = styled.div`
+  padding-bottom: 40px;
+`;
+
 const Footer = styled.div`
   position: fixed;
   bottom: 0;
@@ -209,21 +137,8 @@ const Footer = styled.div`
   z-index: 10;
 `;
 
-const EnrollModeButton = styled.button`
+const EnrollModeButton = styled(Button)`
   width: 100%;
-  padding: 14px;
-  background-color: ${({ theme }) => theme.colors.brand.primary};
-  color: ${({ theme }) => theme.colors.text.inverse};
-  border: none;
-  border-radius: 8px;
-  font-size: ${({ theme }) => theme.typography.size.md};
-  font-weight: ${({ theme }) => theme.typography.weight.semibold};
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.brand.primaryStrong};
-  }
 `;
 
 const SelectionHeader = styled.div`
@@ -273,22 +188,4 @@ const ConfirmButton = styled.button`
     opacity: 0.5;
     cursor: not-allowed;
   }
-`;
-
-const CourseList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-const ObserverTarget = styled.div`
-  height: 20px;
-  margin: 16px 0;
-`;
-
-const LoadingWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
 `;

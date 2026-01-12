@@ -6,6 +6,7 @@ import {
 } from './course.api';
 
 export const courseQuery = {
+  all: () => queryOptions({ queryKey: ['courses'] }),
   list: (params: GetCoursesParams) =>
     queryOptions({
       queryKey: ['courses', params],
