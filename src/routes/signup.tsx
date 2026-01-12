@@ -1,7 +1,6 @@
-import type { UserRole } from '@/domains/auth/api/auth.type';
 import LoginModal from '@/domains/auth/components/LoginModal';
 import { useSignupMutation } from '@/domains/auth/hooks/useSignupMutation';
-import { Modal, Input, Radio, Button, Text } from '@/shared/components';
+import { Button, Input, Modal, Radio, Text } from '@/shared/components';
 import styled from '@emotion/styled';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
@@ -16,7 +15,7 @@ function SignupPage() {
     email: 'hong@weolbu.com',
     phone: '010-1234-5678',
     password: 'Text1234',
-    role: 'STUDENT' as UserRole,
+    role: 'instructor' as 'student' | 'instructor',
   });
 
   const { mutate: signup } = useSignupMutation();
@@ -34,7 +33,7 @@ function SignupPage() {
       password: form.password,
       name: form.name,
       phone: form.phone,
-      role: form.role,
+      role: form.role === 'instructor' ? 'INSTRUCTOR' : 'STUDENT',
     });
   };
 
@@ -93,14 +92,14 @@ function SignupPage() {
                   label="수강생"
                   name="role"
                   value="student"
-                  checked={form.role === 'STUDENT'}
+                  checked={form.role === 'student'}
                   onChange={handleChange('role')}
                 />
                 <Radio
                   label="강사"
                   name="role"
                   value="instructor"
-                  checked={form.role === 'INSTRUCTOR'}
+                  checked={form.role === 'instructor'}
                   onChange={handleChange('role')}
                 />
               </RadioGroup>

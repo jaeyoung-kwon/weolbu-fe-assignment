@@ -14,7 +14,11 @@ const Radio = ({ label, error, id, ...props }: RadioProps) => {
     <RadioWrapper>
       <RadioContainer>
         <HiddenRadio id={radioId} type="radio" {...props} />
-        <StyledRadio hasError={!!error} disabled={props.disabled}>
+        <StyledRadio
+          htmlFor={radioId}
+          hasError={!!error}
+          disabled={props.disabled}
+        >
           <RadioDot />
         </StyledRadio>
         {label && <Label htmlFor={radioId}>{label}</Label>}
@@ -56,7 +60,7 @@ const RadioDot = styled.div`
   transition: opacity 0.2s ease-in-out;
 `;
 
-const StyledRadio = styled.div<{ hasError: boolean; disabled?: boolean }>`
+const StyledRadio = styled.label<{ hasError: boolean; disabled?: boolean }>`
   width: 20px;
   height: 20px;
   border-radius: 50%;
