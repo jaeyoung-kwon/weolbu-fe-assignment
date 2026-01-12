@@ -13,8 +13,9 @@ import { Route as PublicRouteImport } from './routes/_public'
 import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as PublicSignupRouteImport } from './routes/_public/signup'
-import { Route as ProtectedCoursesNewRouteImport } from './routes/_protected/courses.new'
+import { Route as ProtectedInstructorRouteImport } from './routes/_protected/_instructor'
 import { Route as ProtectedCoursesCourseIdRouteImport } from './routes/_protected/courses.$courseId'
+import { Route as ProtectedInstructorCoursesNewRouteImport } from './routes/_protected/_instructor/courses.new'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -34,9 +35,8 @@ const PublicSignupRoute = PublicSignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => PublicRoute,
 } as any)
-const ProtectedCoursesNewRoute = ProtectedCoursesNewRouteImport.update({
-  id: '/courses/new',
-  path: '/courses/new',
+const ProtectedInstructorRoute = ProtectedInstructorRouteImport.update({
+  id: '/_instructor',
   getParentRoute: () => ProtectedRoute,
 } as any)
 const ProtectedCoursesCourseIdRoute =
@@ -45,27 +45,34 @@ const ProtectedCoursesCourseIdRoute =
     path: '/courses/$courseId',
     getParentRoute: () => ProtectedRoute,
   } as any)
+const ProtectedInstructorCoursesNewRoute =
+  ProtectedInstructorCoursesNewRouteImport.update({
+    id: '/courses/new',
+    path: '/courses/new',
+    getParentRoute: () => ProtectedInstructorRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/signup': typeof PublicSignupRoute
   '/': typeof ProtectedIndexRoute
   '/courses/$courseId': typeof ProtectedCoursesCourseIdRoute
-  '/courses/new': typeof ProtectedCoursesNewRoute
+  '/courses/new': typeof ProtectedInstructorCoursesNewRoute
 }
 export interface FileRoutesByTo {
   '/signup': typeof PublicSignupRoute
   '/': typeof ProtectedIndexRoute
   '/courses/$courseId': typeof ProtectedCoursesCourseIdRoute
-  '/courses/new': typeof ProtectedCoursesNewRoute
+  '/courses/new': typeof ProtectedInstructorCoursesNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
+  '/_protected/_instructor': typeof ProtectedInstructorRouteWithChildren
   '/_public/signup': typeof PublicSignupRoute
   '/_protected/': typeof ProtectedIndexRoute
   '/_protected/courses/$courseId': typeof ProtectedCoursesCourseIdRoute
-  '/_protected/courses/new': typeof ProtectedCoursesNewRoute
+  '/_protected/_instructor/courses/new': typeof ProtectedInstructorCoursesNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -76,10 +83,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_protected'
     | '/_public'
+    | '/_protected/_instructor'
     | '/_public/signup'
     | '/_protected/'
     | '/_protected/courses/$courseId'
-    | '/_protected/courses/new'
+    | '/_protected/_instructor/courses/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,11 +125,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicSignupRouteImport
       parentRoute: typeof PublicRoute
     }
-    '/_protected/courses/new': {
-      id: '/_protected/courses/new'
-      path: '/courses/new'
-      fullPath: '/courses/new'
-      preLoaderRoute: typeof ProtectedCoursesNewRouteImport
+    '/_protected/_instructor': {
+      id: '/_protected/_instructor'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedInstructorRouteImport
       parentRoute: typeof ProtectedRoute
     }
     '/_protected/courses/$courseId': {
@@ -131,19 +139,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedCoursesCourseIdRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/_instructor/courses/new': {
+      id: '/_protected/_instructor/courses/new'
+      path: '/courses/new'
+      fullPath: '/courses/new'
+      preLoaderRoute: typeof ProtectedInstructorCoursesNewRouteImport
+      parentRoute: typeof ProtectedInstructorRoute
+    }
   }
 }
 
+interface ProtectedInstructorRouteChildren {
+  ProtectedInstructorCoursesNewRoute: typeof ProtectedInstructorCoursesNewRoute
+}
+
+const ProtectedInstructorRouteChildren: ProtectedInstructorRouteChildren = {
+  ProtectedInstructorCoursesNewRoute: ProtectedInstructorCoursesNewRoute,
+}
+
+const ProtectedInstructorRouteWithChildren =
+  ProtectedInstructorRoute._addFileChildren(ProtectedInstructorRouteChildren)
+
 interface ProtectedRouteChildren {
+  ProtectedInstructorRoute: typeof ProtectedInstructorRouteWithChildren
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedCoursesCourseIdRoute: typeof ProtectedCoursesCourseIdRoute
-  ProtectedCoursesNewRoute: typeof ProtectedCoursesNewRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedInstructorRoute: ProtectedInstructorRouteWithChildren,
   ProtectedIndexRoute: ProtectedIndexRoute,
   ProtectedCoursesCourseIdRoute: ProtectedCoursesCourseIdRoute,
-  ProtectedCoursesNewRoute: ProtectedCoursesNewRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(

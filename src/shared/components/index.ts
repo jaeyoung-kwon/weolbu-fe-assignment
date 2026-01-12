@@ -9,3 +9,4 @@ export { Header } from './Header';
 export { PageLayout } from './PageLayout';
 export { Footer } from './Footer';
 export { AuthGuard } from './AuthGuard';
+export { RoleGuard } from './RoleGuard';

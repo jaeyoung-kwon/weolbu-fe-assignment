@@ -4,6 +4,7 @@ import { useCourseSelection } from '@/pages/home/hooks/useCourseSelection';
 import { useEnrollCourseMutation } from '@/pages/home/hooks/useEnrollCourseMutation';
 import { type SortType, courseQuery } from '@/shared/apis/course';
 import { Button, Footer, Header, PageLayout, Text } from '@/shared/components';
+import { useAuth } from '@/shared/contexts/auth';
 import styled from '@emotion/styled';
 import { ErrorBoundary, Suspense } from '@suspensive/react';
 import { SuspenseInfiniteQuery } from '@suspensive/react-query';
@@ -16,6 +17,7 @@ export const Route = createFileRoute('/_protected/')({
 
 function HomePage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [sort, setSort] = useState<SortType>('recent');
 
   const {
@@ -45,12 +47,14 @@ function HomePage() {
       <Header
         title="강의 목록"
         right={
-          <RegisterButton
-            variant="transparent"
-            onClick={() => navigate({ to: '/courses/new' })}
-          >
-            +강의 등록
-          </RegisterButton>
+          user?.role === 'INSTRUCTOR' && (
+            <RegisterButton
+              variant="transparent"
+              onClick={() => navigate({ to: '/courses/new' })}
+            >
+              +강의 등록
+            </RegisterButton>
+          )
         }
       />
 
