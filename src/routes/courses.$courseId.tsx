@@ -1,5 +1,6 @@
 import { courseQuery } from '@/shared/apis/course';
-import { Button, Header, Text } from '@/shared/components';
+import { Button, Footer, Header, PageLayout, Text } from '@/shared/components';
+import { formatDate, formatPrice } from '@/shared/utils/format';
 import styled from '@emotion/styled';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
@@ -13,27 +14,14 @@ function CourseDetailPage() {
   const navigate = useNavigate();
   const { data: course } = useSuspenseQuery(courseQuery.detail(courseId));
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
-
-  const handleGoBack = () => {
-    navigate({ to: '/' });
-  };
-
   return (
-    <>
+    <PageLayout hasFooter>
       <Header
         left={
-          <BackButton variant="transparent" onClick={handleGoBack}>
+          <BackButton
+            variant="transparent"
+            onClick={() => navigate({ to: '/' })}
+          >
             ← 뒤로
           </BackButton>
         }
@@ -46,14 +34,20 @@ function CourseDetailPage() {
         <Text size="md" color="secondary">
           강사: {course.instructorName}
         </Text>
+        <DescriptionSection>
+          <Text size="lg" weight="semibold">
+            강의 설명
+          </Text>
+          <DescriptionText>{course.description}</DescriptionText>
+        </DescriptionSection>
       </TitleSection>
 
       <InfoSection>
         <InfoCard>
           <InfoLabel>수강료</InfoLabel>
-          <PriceText size="xl" weight="bold">
+          <Text size="xl" weight="bold" color="primary">
             {formatPrice(course.price)}원
-          </PriceText>
+          </Text>
         </InfoCard>
 
         <InfoCard>
@@ -72,19 +66,12 @@ function CourseDetailPage() {
         </InfoCard>
       </InfoSection>
 
-      <DescriptionSection>
-        <Text size="lg" weight="semibold">
-          강의 설명
-        </Text>
-        <DescriptionText>{course.description}</DescriptionText>
-      </DescriptionSection>
-
-      <ActionSection>
+      <Footer>
         <EnrollButton disabled={course.isFull}>
           {course.isFull ? '수강 마감' : '수강 신청'}
         </EnrollButton>
-      </ActionSection>
-    </>
+      </Footer>
+    </PageLayout>
   );
 }
 
@@ -94,6 +81,19 @@ const TitleSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+`;
+
+const DescriptionSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const DescriptionText = styled(Text)`
+  font-size: ${({ theme }) => theme.typography.size.md};
+  line-height: 1.6;
+  color: ${({ theme }) => theme.colors.text.secondary};
+  white-space: pre-wrap;
 `;
 
 const InfoSection = styled.div`
@@ -123,37 +123,12 @@ const InfoValue = styled(Text)`
   font-weight: ${({ theme }) => theme.typography.weight.semibold};
 `;
 
-const PriceText = styled(Text)`
-  color: ${({ theme }) => theme.colors.brand.primary};
-`;
-
 const AvailableSeats = styled(Text)`
   font-size: ${({ theme }) => theme.typography.size.sm};
   color: ${({ theme }) => theme.colors.brand.primary};
   font-weight: ${({ theme }) => theme.typography.weight.medium};
 `;
 
-const DescriptionSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px 0;
-`;
-
-const DescriptionText = styled(Text)`
-  font-size: ${({ theme }) => theme.typography.size.md};
-  line-height: 1.6;
-  color: ${({ theme }) => theme.colors.text.secondary};
-  white-space: pre-wrap;
-`;
-
-const ActionSection = styled.div`
-  margin-top: auto;
-  padding-top: 16px;
-`;
-
 const EnrollButton = styled(Button)`
   width: 100%;
-  padding: 16px;
-  font-size: ${({ theme }) => theme.typography.size.lg};
 `;

@@ -1,5 +1,6 @@
 import type { Course } from '@/shared/apis/course';
 import { Checkbox, Text } from '@/shared/components';
+import { formatPrice } from '@/shared/utils/format';
 import styled from '@emotion/styled';
 import { useNavigate } from '@tanstack/react-router';
 
@@ -17,10 +18,6 @@ const CourseCard = ({
   onToggle,
 }: CourseCardProps) => {
   const navigate = useNavigate();
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('ko-KR').format(price);
-  };
 
   const handleClick = () => {
     if (isSelectionMode) {
