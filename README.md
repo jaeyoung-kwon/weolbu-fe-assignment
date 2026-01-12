@@ -9,12 +9,14 @@
 - TypeScript `strict` 모드 활성화
 - TanStack Router 파일 라우팅 + `AuthGuard`/`RoleGuard`로 권한 제어
 - API 요청/응답 타입 정의 (`src/shared/apis`)
+- mutation 훅은 관심사 분리를 위해 커스텀 훅으로 분리하고, query는 query factory로 관리
 
 ### ✅ 사용자 흐름에 맞춘 화면 구성
 
 - 회원가입/로그인 → 강의 목록 → 강의 상세/등록
 - 강의 목록: 정렬 3종 + 무한 스크롤 + 다중 선택 수강 신청
 - 강의 등록: 강사 전용 접근
+- 페이지 컴포넌트는 전체 레이아웃을 한눈에 볼 수 있도록 구성
 
 ---
 
